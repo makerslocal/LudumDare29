@@ -167,6 +167,8 @@ public class Heap : IList, ICloneable
 	public int IndexOf(object O)
 	{
 		int Result = -1;
+		if (FList.Count == 0)
+			return 0;
 		Result = FList.BinarySearch(O, FComparer);
 		while(Result>0 && FList[Result-1].Equals(O))
 			Result--;

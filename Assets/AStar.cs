@@ -231,6 +231,7 @@ public sealed class AStar
 
 		FOpenList.Add(FStartNode);
 
+		Debug.Log ("while fopenlist > 0");
 		while(FOpenList.Count > 0) 
 		{
 			// Get the node with the lowest TotalCost
@@ -247,6 +248,7 @@ public sealed class AStar
 
 			// Get successors to the current node
 			NodeCurrent.GetSuccessors(FSuccessors);
+			Debug.Log("foreach");
 			foreach(AStarNode NodeSuccessor in FSuccessors) 
 			{
 				// Test if the currect successor node is on the open list, if it is and

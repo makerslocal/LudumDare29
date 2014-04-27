@@ -78,11 +78,22 @@ public class AStarNode2D : AStarNode
 
 	private int GetMap(int x, int y)
 	{
-		if((x < 0) || (x >= Map.Width))
+		Debug.Log ("getmap: " + x + " " + y);
+
+		if ((x < 0) || (x >= Map.Width)) {
+			Debug.Log("error with x");
 			return(-1);
-		if((y < 0) || (y >= Map.Height))
+		}
+		if ((y < 0) || (y >= Map.Height)) {
+			Debug.Log ("error with x");
 			return(-1);
-		return((Map.Walls[x,y] == null) ? 0 : 1);
+		}
+
+		bool wall = (Map.Walls [x, y] == null);
+
+		Debug.Log ("wall?: " + Map.Walls [x, y] == null);
+
+		return(wall ? 9999 : 1);
 	}
 
 	#endregion
