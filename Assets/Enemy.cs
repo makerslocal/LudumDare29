@@ -68,7 +68,7 @@ public class Enemy : Moving {
 			return;
 		}
 		
-		//Flee ();
-		Chase ();
+		Flee ();
+		//Chase ();
 	}
 }
