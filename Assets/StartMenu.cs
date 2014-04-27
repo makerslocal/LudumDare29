@@ -2,31 +2,38 @@
 using System.Collections;
 
 public class StartMenu: MonoBehaviour {
-	private Rect windowRect = new Rect (100, 100, 200, 100);
-	private bool menuStory = false;
-	private bool mainMenu = true;
+
+	bool Window1 = true;
+	bool Window2 = false;
 
 	void OnGUI () {
-		GUILayout.BeginArea (new Rect (500, 500, 300, 300));
-		if (mainMenu) {
-			GUILayout.Box ("Main Menu");
-			if (GUILayout.Button ("Story")) {
-					menuStory = true;
-					mainMenu = false;
-			}
-		}
-		if (menuStory) {
-			GUILayout.Box ("Story here");
-			if(GUILayout.Button ("Back to Menu")) {
-				mainMenu = true;
-				menuStory = false;
-			}
+
+		Rect windowRect = new Rect(20, 20, 120, 50);
+
+		if(Window1)
+		{
+			windowRect = GUI.Window(1, windowRect, DoWindow1, "My Window 1");
 		}
 
-		if(GUILayout.Button("Mechanics")) {
+		if(Window2)
+		{
+			windowRect = GUI.Window(2, windowRect, DoWindow2, "My Window 2");
 		}
-
-		if (GUILayout.Button ("Start")) {
-				}
+	}
+	
+	void DoWindow1(int windowID) {
+		if (GUI.Button(new Rect(10, 20, 100, 20), "Open Window 2"))
+		{
+			Window1 = false;
+			Window2 = true;
+		}
+	}
+	
+	void DoWindow2(int windowID) {
+		if (GUI.Button(new Rect(10, 20, 100, 20), "Open Window 1"))
+		{
+			Window1 = true;
+			Window2 = false;
+		}
 	}
 }
