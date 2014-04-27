@@ -2,38 +2,68 @@
 using System.Collections;
 
 public class StartMenu: MonoBehaviour {
+	public GUISkin gooey = null;
 
-	bool Window1 = true;
-	bool Window2 = false;
+	bool WindowMain = true;
+	bool WindowMechanics = false;
+	bool WindowCredits = false;
 
 	void OnGUI () {
+		GUI.skin = gooey;
 
-		Rect windowRect = new Rect(20, 20, 120, 50);
+		Rect windowRect = new Rect(Screen.width*0.45f, Screen.height*0.45f, 120, 50);
+		Rect windowRect1 = new Rect (Screen.width * 0.45f, Screen.height * 0.45f, 500, 500);
 
-		if(Window1)
+		if(WindowMain)
 		{
-			windowRect = GUI.Window(1, windowRect, DoWindow1, "My Window 1");
+			windowRect = GUILayout.Window(0, windowRect, DoWindowMain, "");
 		}
 
-		if(Window2)
+		if(WindowMechanics)
 		{
-			windowRect = GUI.Window(2, windowRect, DoWindow2, "My Window 2");
+			windowRect = GUI.Window(1, windowRect1, DoWindowMechanics, "Game Mechanics");
+		}
+
+		if (WindowCredits) 
+		{
+			windowRect = GUILayout.Window (2, windowRect, DoWindowCredits, "Credits");
+		}
+	}
+
+	void DoWindowMain(int windowID) {
+		GUILayout.Label("This is an sized label");
+		if (GUILayout.Button("Start"))
+		{
+			WindowMain = false;
+			Application.LoadLevel(0);
+			// Load character generation (random at this time)
+			// Automatically load a random level after
+		}
+		if (GUILayout.Button ("How to Play"))
+		{
+			WindowMain = false;
+			WindowMechanics = true;
+		}
+		if (GUILayout.Button ("Credits")) 
+		{
+			WindowMain = false;
+			WindowCredits = true;
 		}
 	}
 	
-	void DoWindow1(int windowID) {
-		if (GUI.Button(new Rect(10, 20, 100, 20), "Open Window 2"))
+	void DoWindowMechanics(int windowID) {
+		if (GUILayout.Button("Back"))
 		{
-			Window1 = false;
-			Window2 = true;
+			WindowMain = true;
+			WindowMechanics = false;
 		}
 	}
-	
-	void DoWindow2(int windowID) {
-		if (GUI.Button(new Rect(10, 20, 100, 20), "Open Window 1"))
+
+	void DoWindowCredits(int WindowID) {
+		if (GUILayout.Button ("Back")) 
 		{
-			Window1 = true;
-			Window2 = false;
+			WindowMain = true;
+			WindowCredits = false;
 		}
 	}
 }
