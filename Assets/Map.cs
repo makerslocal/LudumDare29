@@ -4,14 +4,11 @@ public static class Map
 {
 	static Map()
 	{
-		Clear();
-
-		Generate.Border ();
-		//Generate.Room ();
-		//Generate.Room ();
-	}
-
-	public static void Clear()
+		Clear ();
+		Generate();
+    }
+    
+    public static void Clear()
 	{
 		int height = Random.Range (4,8);
 		int width = Random.Range (4,8);
@@ -24,10 +21,29 @@ public static class Map
 		
 		Walls = new GameObject[width, height];
 
-		Generate.Clear ();
+		Create.Clear ();
 	}
 
-	public static int Height {
+	public static void Generate()
+	{
+		Clear();
+        
+		Create.Border ();
+		
+		while(!Create.Room());
+		
+		for(int i = 0; i < 5; i++)
+		{
+			Create.Room();
+		}
+		
+		for(int i = 0; i < 10; i++)
+        {
+			Create.Pillar();
+        }
+    }
+    
+    public static int Height {
 		get {
 			return Walls.GetLength (1);
 		}
@@ -49,14 +65,16 @@ public static class Map
 		}
 	}
 
-	private static class Generate
+	#region Create
+
+	private static class Create
 	{
-		static Generate()
+		static Create()
 		{
 			Clear ();
 		}
 
-		public static void Border(int height, int width, int x, int y)
+		public static void Border(bool floor, int height, int width, int x, int y)
 		{
 			for (int xx = x; xx < width + x; xx++)
 			{
@@ -67,23 +85,97 @@ public static class Map
 						continue;
 					}
 
-					Wall (xx, yy);					
+					if(floor)
+					{
+						Floor (xx, yy);
+					}
+					else
+					{
+						Wall (xx, yy);
+					}
 				}
 			}
 		}
 
 		public static void Border()
 		{
-			Border(Height, Width, 0, 0);
+			Border(false, Height, Width, 0, 0);
+			Border(true, Height - 2, Width - 2, 1, 1);
 		}
-
-		public static void Clear()
+        
+        public static void Clear()
 		{
 			Floors = new bool[Width, Height];
 		}
 
-		public static void Door()
+		public static bool Door(int x, int y)
 		{
+			return Floor (x, y);
+		}
+
+		public static bool Door(int height, int width, int x, int y)
+		{
+			int xx;
+			int yy;
+
+			int Loops = 0;
+
+			while(true)
+			{
+				if(++Loops > 1000)
+				{
+					break;
+				}
+
+				xx = Random.Range (x, x + width);
+
+				if(xx < 1 || xx >= Width - 1)
+				{
+					continue;
+                }
+
+				yy = Random.Range (y, y + height);
+                
+				if(yy < 1 || yy >= Height - 1)
+				{
+					continue;
+                }
+
+				if(xx > x && xx < x + width && yy > y && yy < y + height)
+				{
+					continue;
+                }
+
+				if(xx == x && yy == y)
+				{
+                    continue;
+                }
+
+				if(xx == x + width && yy == y)
+				{
+					continue;
+                }
+
+				if(xx == x && yy == y + height - 1)
+				{
+					continue;
+                }
+                
+                if(xx == x + width - 1 && yy == y + height - 1)
+				{
+					continue;
+                }
+                
+                if(!Door (xx, yy))
+                {
+                    continue;
+				}
+
+				return true;
+            }
+
+			return false;
+            
 		}
 
 		public static bool[,] Floors {
@@ -108,7 +200,7 @@ public static class Map
 				return false;
 			}
 
-			if(x >= Height)
+			if(y >= Height)
 			{
 				return false;
 			}
@@ -123,10 +215,76 @@ public static class Map
 			return true;
 		}
 
-		public static void Room()
+		public static bool Hall()
 		{
-			int height = Random.Range(1, Height >> 1);
-			int width = Random.Range(1, Width >> 1);
+			bool Created = false;
+
+			int x = Random.Range (1, (Width >> 1) - 1);
+			int y = Random.Range (1, (Height >> 1) - 1);
+			
+            x <<= 1;
+            y <<= 1;
+
+			while(true)
+			{
+				for(int xx = -1; xx <= 1; xx++)
+				{
+					for(int yy = -1; yy <= 1; yy++)
+					{
+						int xxx = x + xx;
+						int yyy = y + yy;
+						
+	                    if(Walls[xxx, yyy] != null)
+	                    {
+							return Created;
+	                    }
+	                }
+	            }
+			}
+        }
+        
+		public static bool Pillar()
+		{
+			int x = Random.Range (1, (Width >> 1) - 1);
+			int y = Random.Range (1, (Height >> 1) - 1);
+
+			x <<= 1;
+			y <<= 1;
+
+			for(int xx = -1; xx <= 1; xx++)
+            {
+				for(int yy = -1; yy <= 1; yy++)
+				{
+					int xxx = x + xx;
+					int yyy = y + yy;
+
+					if(Walls[xxx, yyy] != null)
+					{
+						return false;
+					}
+				}
+			}
+
+			if(!Wall (x, y))
+			{
+				return false;
+			}
+
+            for(int xx = -1; xx <= 1; xx++)
+			{
+				for(int yy = -1; yy <= 1; yy++)
+				{
+					Floor (x + xx, y + yy);
+                }
+            }
+
+			return true;
+		}
+
+		public static bool Room()
+		{
+			int height = Random.Range(2, Height >> 2);
+			int width = Random.Range(2, Width >> 2);
 
 			height <<= 1;
 			width <<= 1;
@@ -137,7 +295,39 @@ public static class Map
 			int x = Random.Range (0, Width - width);
 			int y = Random.Range (0, Height - height);
 
-			Border (height, width, x, y);
+			x >>= 1;
+			x <<= 1;
+
+			y >>= 1;
+			y <<= 1;
+
+			for(int xx = x; xx < x + width; xx++)
+			{
+				for(int yy = y; yy < y + height; yy++)
+				{
+					if(Floors[xx,yy])
+					{
+						return false;
+					}
+				}
+			}
+
+			if(!Door (height, width, x, y))
+			{
+				return false;
+			}
+
+			for(int xx = x + 1; xx < x + width - 1; xx++)
+			{
+				for(int yy = y + 1; yy < y + height - 1; yy++)
+				{
+					Floor (xx, yy);
+                }
+            }
+            
+            Border (false, height, width, x, y);
+
+			return true;
 		}
 
 		public static GameObject Wall(int x, int y)
@@ -180,4 +370,6 @@ public static class Map
 			return quad;
 		}
 	}
+
+	#endregion
 }
