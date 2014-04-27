@@ -78,11 +78,11 @@ public class AStarNode2D : AStarNode
 
 	private int GetMap(int x, int y)
 	{
-		if((x < 0) || (x > Map.Width))
+		if((x < 0) || (x >= Map.Width))
 			return(-1);
-		if((y < 0) || (y > Map.Height))
+		if((y < 0) || (y >= Map.Height))
 			return(-1);
-		return((Map.Walls[y,x] == null) ? 0 : 1);
+		return((Map.Walls[x,y] == null) ? 0 : 1);
 	}
 
 	#endregion
