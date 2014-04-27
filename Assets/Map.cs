@@ -79,7 +79,7 @@ public static class Map
 
 		public static void Clear()
 		{
-			Floors = new bool[Height, Width];
+			Floors = new bool[Width, Height];
 		}
 
 		public static void Door()
