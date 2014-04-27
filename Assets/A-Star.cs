@@ -11,12 +11,12 @@ public class AStar : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		player = GameObject.FindGameObjectWithTag("Player").transform; // our target for now
+		//player = GameObject.FindGameObjectWithTag("Player").transform; // our target for now
 	}
 	
 	// UpdateAStar is called once per 'tick'
 	void UpdateAStar () {
-		path = FindPath (player);
+		//path = FindPath (player);
 	}
 
 	int FindPath (Transform target) {
@@ -26,6 +26,6 @@ public class AStar : MonoBehaviour {
 		while (!found) {
 
 		}
-		return ret;
+		return 0;
 	}
 }
