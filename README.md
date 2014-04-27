@@ -8,11 +8,11 @@ nuclear fallout and deadly trains. To this end, humanity
 has migrated to the only pristine location left on 
 Earth: Antarctica. Like a phoenix from the ashes humanity
  grows again, building giant, ultra efficient cities to 
-span the icy contenent. The frigid land is harsh, but 
+span the frigid continent. The frigid land is harsh, but 
 also serves as a strange beacon of development and 
 technology advancement for the remnants of our species.
 Self augmentation and perception alterations become a 
-norm as nanomachines, referred to as clouds, envolope 
+norm as nanomachines, referred to as clouds, envelope 
 their users to provide lifestyle and utilitous services.
 **Welcome to ICE.** 
 You are *The Catalyst* and the Cloud must be stopped.
