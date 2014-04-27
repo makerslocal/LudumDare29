@@ -3,6 +3,7 @@ using System.Collections;
 
 public class StartMenu: MonoBehaviour {
 	public GUISkin gooey = null;
+	//public Texture placeholder = placeholder;
 
 	bool WindowMain = true;
 	bool WindowMechanics = false;
@@ -31,11 +32,11 @@ public class StartMenu: MonoBehaviour {
 	}
 
 	void DoWindowMain(int windowID) {
-		GUILayout.Label("This is an sized label");
+		//GUILayout.Label(Texture(placeholder));
 		if (GUILayout.Button("Start"))
 		{
 			WindowMain = false;
-			Application.LoadLevel(0);
+			//Application.LoadLevel(0);
 			// Load character generation (random at this time)
 			// Automatically load a random level after
 		}
