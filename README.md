@@ -6,14 +6,17 @@ LD29
 **The year is 2076** and our world is a wasteland of
 nuclear fallout and deadly trains. To this end, humanity 
 has migrated to the only pristine location left on 
-Earth: Antarctica. Like a phoenix from the ashes humanity
- grows again, building giant, ultra efficient cities to 
-span the frigid continent. The frigid land is harsh, but 
-also serves as a strange beacon of development and 
-technology advancement for the remnants of our species.
-Self augmentation and perception alterations become a 
-norm as nanomachines, referred to as clouds, envelope 
-their users to provide lifestyle and utilitous services.
+Earth: Antarctica. Like a phoenix from the ashes we
+ grow again, building giant, ultra efficient cities to 
+span the frigid continent. The land is harsh, but 
+also serves as a unusual beacon of development and 
+technology for the remnants of our people.
+Self augmentation and perception alteration becomes a 
+norm as nanomachines, referred to as *clouds*, are 
+developed by megacorporations to envelope users and 
+provide lifestyle and utility services at the cost of
+personal freedome.
+
 **Welcome to ICE.** 
 You are *The Catalyst* and the Cloud must be stopped.
 
