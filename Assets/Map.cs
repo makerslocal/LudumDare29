@@ -76,8 +76,6 @@ public static class Map
 			return;
 		}
 
-		Create.Exit ();
-		
 		Paint.Floors();
 		Paint.Walls();
         

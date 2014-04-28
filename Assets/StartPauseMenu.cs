@@ -2,6 +2,19 @@ using UnityEngine;
 using System.Collections;
 
 public class StartPauseMenu: MonoBehaviour {
+
+	public static bool IsPauseMenu
+	{
+		get;
+		set;
+	}
+
+	public static bool Paused
+	{
+		get;
+		set;
+	}
+
 	public GUISkin gooey = null;
 	public Texture2D logo;
 	public Texture2D frozen;
@@ -9,15 +22,7 @@ public class StartPauseMenu: MonoBehaviour {
 
 	bool WindowMain = true;
 	bool WindowMechanics, WindowCredits, WindowBackground, WindowPause = false;
-
-	public bool Paused = false;
-
-	public bool IsPauseMenu
-	{
-		get;
-		set;
-	}
-
+	
 	void DoWindowMechanics(int windowID) {
 		bool one = true;
 		bool two = false;
@@ -172,57 +177,13 @@ public class StartPauseMenu: MonoBehaviour {
 			WindowCredits = false;
 		}
 	}
-
-	void OnGUI () {
-
-		if(IsPauseMenu && Paused)
-		{
-			return;
-		}
-
-		logo = Resources.Load <Texture2D> ("Game_Logo_Ideas_v2");
-		frozen = Resources.Load <Texture2D> ("frozen");
-		GUI.skin = gooey;
-		IsPauseMenu = false;
-		
-		Rect windowRect = new Rect((Screen.width-200)/2, (Screen.height-100)/1.4f, 200, 100);
-		
-		if(WindowMain)
-		{
-			//GUI.Box (new Rect(0, 0, Screen.width, Screen.height), frozen, GUIStyle.none);
-			// Works when image import settings in editor are corrected, but did something different with cameras for now
-			GUI.Box(new Rect((Screen.width-1024)/2, (Screen.height-512)/7, Screen.width, Screen.height), logo, GUIStyle.none);
-		}
-		if(WindowMain)
-			// Removed "|| WindowPause" for testing
-		{
-			GUILayout.Window(1, windowRect, DoWindowMain, "", GUIStyle.none, GUILayout.MinWidth (200), GUILayout.MinHeight (100));
-		}
-		
-		if(WindowMechanics)
-		{
-			GUILayout.Window(2, new Rect((Screen.width-500)/2, 200, 500, 400), DoWindowMechanics, "Welcome to I.C.E.: Beneath the Cloud!");
-		}
-		
-		if (WindowBackground) 
-		{
-			GUILayout.Window (3, new Rect((Screen.width-700)/2, 200, 700, 400), DoWindowBackground, "In the year 2076...");
-		}
-		
-		if (WindowCredits) 
-		{
-			GUI.Window (4, new Rect((Screen.width-300)/2, 100, 300, 650), DoWindowCredits, "I.C.E was created by");
-		}
-		if (IsPauseMenu && Paused)
-		{
-			GUILayout.Window (0, new Rect((Screen.width-100)/2, 200, 150, 165), DoWindowMain, "Pause");
-		}
-	}
 	
 	void DoWindowMain(int windowID) {
 		//if(!IsPauseMenu){
 		if (GUILayout.Button("Start"))
 		{
+			IsPauseMenu = true;
+			Paused = false;
 			WindowMain = false;
 			Application.LoadLevel(0);
 			// To do: Load character generation (random or choose)
@@ -256,12 +217,70 @@ public class StartPauseMenu: MonoBehaviour {
 		}
 		if(GUILayout.Button ("Quit"))
 		{
-			Application.Quit();
+			if(IsPauseMenu)
+			{
+				IsPauseMenu = false;
+				Application.LoadLevel (0);
+			}
+			else
+			{
+				Application.Quit();
+			}
+		}
+	}
+
+	void OnGUI () {
+		
+		if(IsPauseMenu && Paused)
+		{
+			return;
+		}
+		
+		logo = Resources.Load <Texture2D> ("Game_Logo_Ideas_v2");
+		frozen = Resources.Load <Texture2D> ("frozen");
+		GUI.skin = gooey;
+
+		Rect windowRect = new Rect((Screen.width-200)/2, (Screen.height-100)/1.4f, 200, 100);
+		
+		if(WindowMain)
+		{
+			//GUI.Box (new Rect(0, 0, Screen.width, Screen.height), frozen, GUIStyle.none);
+			// Works when image import settings in editor are corrected, but did something different with cameras for now
+			GUI.Box(new Rect((Screen.width-1024)/2, (Screen.height-512)/7, Screen.width, Screen.height), logo, GUIStyle.none);
+		}
+		if(WindowMain)
+			// Removed "|| WindowPause" for testing
+		{
+			GUILayout.Window(1, windowRect, DoWindowMain, "", GUIStyle.none, GUILayout.MinWidth (200), GUILayout.MinHeight (100));
+		}
+		
+		if(WindowMechanics)
+		{
+			GUILayout.Window(2, new Rect((Screen.width-500)/2, 200, 500, 400), DoWindowMechanics, "Welcome to I.C.E.: Beneath the Cloud!");
+		}
+		
+		if (WindowBackground) 
+		{
+			GUILayout.Window (3, new Rect((Screen.width-700)/2, 200, 700, 400), DoWindowBackground, "In the year 2076...");
+		}
+		
+		if (WindowCredits) 
+		{
+			GUI.Window (4, new Rect((Screen.width-300)/2, 100, 300, 650), DoWindowCredits, "I.C.E was created by");
+		}
+		if (IsPauseMenu && Paused)
+		{
+			GUILayout.Window (0, new Rect((Screen.width-100)/2, 200, 150, 165), DoWindowMain, "Pause");
 		}
 	}
 
 	void OnLevelWasLoaded(int level)
 	{
+		if(!IsPauseMenu)
+		{
+			return;
+		}
+
 		Map.Generate();
 	}
 
@@ -275,8 +294,6 @@ public class StartPauseMenu: MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			Paused = !Paused;
-
-			enabled = Paused;
 		}
 	}
 }
