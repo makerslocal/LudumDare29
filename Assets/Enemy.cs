@@ -35,6 +35,9 @@ public class Enemy : Moving {
 		AStarNode2D GoalNode = new AStarNode2D(null,null,0,goalx,goaly);
 		AStarNode2D StartNode = new AStarNode2D(null,GoalNode,0,startx,starty);
 		StartNode.GoalNode = GoalNode;
+
+		//Debug.Log ("chasing from: " + startx + "," + starty + " to: " + goalx + "," + goaly);
+		
 		astar.FindPath(StartNode,GoalNode);
 
 		if (astar.Solution.Count > 1) {
@@ -53,8 +56,8 @@ public class Enemy : Moving {
 			}
 
 			AStarNode2D firstStep = (AStarNode2D)astar.Solution[1];
-			//Move (firstStep.X - startx, firstStep.Y - starty); // just take the first step... you'll recalculate the path next go around
-			Move (startx, starty); // don't move
+			Move (firstStep.X - startx, firstStep.Y - starty); // just take the first step... you'll recalculate the path next go around
+			//Move (startx, starty); // don't move
 		}
 	}
 	
@@ -99,12 +102,12 @@ public class Enemy : Moving {
 			return;
 		}
 
-		if (!done) {
-			Chase ();
+		if (done) {
+			//Chase ();
 			// only calls Chase() once
 		}
 		
 		//Flee ();
-		//Chase ();
+		Chase ();
 	}
 }
