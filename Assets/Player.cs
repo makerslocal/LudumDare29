@@ -3,34 +3,34 @@ using System.Collections.Generic;
 
 public class Player : Moving {
 
-	private Dictionary<string, Dictionary<Direction, Texture2D[]>> Textures;
+	//private Dictionary<string, Dictionary<Direction, Texture2D[]>> Textures;
 
 	public Player() : base()
 	{
 		gameObject.AddComponent<StoryWindows>();
 		Direction = Direction.Down;
 
-		Textures = new Dictionary<string, Dictionary<Direction, Texture2D[]>>()
-		{
-			{"Attack", new Dictionary<Direction, Texture2D[]>
-			{
-				{ Direction.Up, new[] { Resources.Load<Texture2D>("player_attack_1-1"), Resources.Load<Texture2D>("player_attack_1-2") } },
-				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_attack_2-1"), Resources.Load<Texture2D>("player_attack_2-2") } },
-				{ Direction.Down, new[] { Resources.Load<Texture2D>("player_attack_3-1"), Resources.Load<Texture2D>("player_attack_3-2") } },
-			}},
-			{"Idle", new Dictionary<Direction, Texture2D[]>
-			{
-				{ Direction.Up, new[] { Resources.Load<Texture2D>("player_idle_1") } },
-				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_idle_2") } },
-				{ Direction.Down, new[] { Resources.Load<Texture2D>("player_idle_3") } },
-			}},
-			{"Walk", new Dictionary<Direction, Texture2D[]>
-			{
-				{ Direction.Up, new[] { Resources.Load<Texture2D>("player_walk_1-1"), Resources.Load<Texture2D>("player_walk_1-2") } },
-				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_walk_2-1"), Resources.Load<Texture2D>("player_walk_2-2") } },
-				{ Direction.Down, new[] { Resources.Load<Texture2D>("player_walk_3-1"), Resources.Load<Texture2D>("player_walk_3-2") } },
-			}},
-		};
+		//Textures = new Dictionary<string, Dictionary<Direction, Texture2D[]>>()
+		//{
+		//	{"Attack", new Dictionary<Direction, Texture2D[]>
+		//	{
+		//		{ Direction.Up, new[] { Resources.Load<Texture2D>("player_attack_1-1"), Resources.Load<Texture2D>("player_attack_1-2") } },
+		//		{ Direction.Left, new[] { Resources.Load<Texture2D>("player_attack_2-1"), Resources.Load<Texture2D>("player_attack_2-2") } },
+		//		{ Direction.Down, new[] { Resources.Load<Texture2D>("player_attack_3-1"), Resources.Load<Texture2D>("player_attack_3-2") } },
+		//	}},
+		//	{"Idle", new Dictionary<Direction, Texture2D[]>
+		//	{
+		//		{ Direction.Up, new[] { Resources.Load<Texture2D>("player_idle_1") } },
+		//		{ Direction.Left, new[] { Resources.Load<Texture2D>("player_idle_2") } },
+		//		{ Direction.Down, new[] { Resources.Load<Texture2D>("player_idle_3") } },
+		//	}},
+		//	{"Walk", new Dictionary<Direction, Texture2D[]>
+		//	{
+		//		{ Direction.Up, new[] { Resources.Load<Texture2D>("player_walk_1-1"), Resources.Load<Texture2D>("player_walk_1-2") } },
+		//		{ Direction.Left, new[] { Resources.Load<Texture2D>("player_walk_2-1"), Resources.Load<Texture2D>("player_walk_2-2") } },
+		//		{ Direction.Down, new[] { Resources.Load<Texture2D>("player_walk_3-1"), Resources.Load<Texture2D>("player_walk_3-2") } },
+		//	}},
+		//};
     }
     
     public new Moving.Direction Direction

@@ -24,7 +24,7 @@ public class StoryWindows : MonoBehaviour {
 
 	void DoWindowStory(int WindowID)
 	{
-		Piece = Random.Range(0, 6);
+		int Piece = Random.Range(0, 6);
 
 		switch(Piece)
 		{
@@ -153,7 +153,6 @@ public class StoryWindows : MonoBehaviour {
 			break;
 
 		case 5:
-<<<<<<< HEAD
 			GUILayout.Label ("\n");
 
 			if(GUILayout.Button ("Back"))
@@ -172,6 +171,3 @@ public class StoryWindows : MonoBehaviour {
 		}
 	}
 }
-=======
-			GUILayout.Label ("\n
->>>>>>> a7ced474ac17dd349eb6981292cb485e3ce9b67b

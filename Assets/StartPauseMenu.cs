@@ -21,7 +21,7 @@ public class StartPauseMenu: MonoBehaviour {
 	public Vector2 scrollPosition = Vector2.zero;
 
 	bool WindowMain = true;
-	bool WindowMechanics, WindowCredits, WindowBackground, WindowPause = false;
+	bool WindowMechanics, WindowCredits, WindowBackground = false;
 	
 	void DoWindowMechanics(int windowID) {
 		bool one = true;
