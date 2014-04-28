@@ -16,7 +16,7 @@ public class Player : Moving {
 	}
 	
 	void Update () {
-		
+
 		if(Input.GetKeyDown(KeyCode.UpArrow)) {
 			Move (0,1);
 		}
@@ -29,5 +29,12 @@ public class Player : Moving {
 		if(Input.GetKeyDown(KeyCode.RightArrow)) {
 			Move (1,0);
 		}
+
+		if(Camera.main == null)
+		{
+			return;
+		}
+
+		Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
 	}
 }
