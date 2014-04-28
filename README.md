@@ -3,7 +3,7 @@ LD29
 
 ### Ludum Dare 29 [2014] - *Beneath the Surface*
 
-![Game Logo][Assets/Resources/Game_Logo_Ideas_v2.png]
+![Game Logo][logo]
 
 **The year is 2076** and our world is a wasteland of
 nuclear fallout and deadly trains. To this end, humanity 
@@ -37,3 +37,5 @@ You are *The Catalyst* and the Cloud must be stopped.
 | Leon “Noel” Kennedy | Artwork |
 | Ashley “Ultimae” West | Artwork |
 
+
+[logo]: https://github.com/brodavi/LD29/blob/master/Assets/Resources/Game_Logo_Ideas_v2.png "Game Logo"
