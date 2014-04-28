@@ -1,48 +1,79 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 public static class Map
 {
 	static Map()
 	{
 		Clear ();
-		Generate();
     }
     
     public static void Clear()
 	{
-		int height = Random.Range (4,8);
-		int width = Random.Range (4,8);
-		
-		height <<= 1;
-		width <<= 1;
-		
-		height++;
-		width++;
-		
-		Walls = new GameObject[width, height];
+		Player = null;
+
+		Walls = new GameObject[0,0];
 
 		Create.Clear ();
 	}
 
 	public static void Generate()
 	{
+		Debug.Log ("Generating Level...");
+
 		Clear();
+
+		int height = Random.Range (8,16);
+		int width = Random.Range (8,16);
+		
+		height <<= 1;
+		width <<= 1;
+		
+		height++;
+		width++;
+
+		Walls = null;
+        
+        Walls = new GameObject[width, height];
+
+		Create.Reset ();
+
+		int count = Height * Width * 10;
         
 		Create.Border ();
-		
-		while(!Create.Room());
-		
-		for(int i = 0; i < 5; i++)
+
+		for(int i = 0; i < count; i++)
 		{
 			Create.Room();
 		}
 		
-		for(int i = 0; i < 10; i++)
-        {
+		for(int i = 0; i < count; i++)
+		{
+			Create.Hall();
+		}
+
+		for(int i = 0; i < count; i++)
+		{
 			Create.Pillar();
-        }
-    }
-    
+		}
+
+		Create.Item();
+		Create.Item();
+
+		Create.Player();
+
+		Create.Enemy();
+		Create.Enemy();
+		Create.Enemy();
+
+		if(Camera.main == null)
+		{
+			return;
+		}
+		
+		Camera.main.backgroundColor = Color.black;
+	}
+	
     public static int Height {
 		get {
 			return Walls.GetLength (1);
@@ -105,9 +136,9 @@ public static class Map
         
         public static void Clear()
 		{
-			Floors = new bool[Width, Height];
+			Floors = new bool[0,0];
 		}
-
+		
 		public static bool Door(int x, int y)
 		{
 			return Floor (x, y);
@@ -151,7 +182,7 @@ public static class Map
                     continue;
                 }
 
-				if(xx == x + width && yy == y)
+				if(xx == x + width - 1 && yy == y)
 				{
 					continue;
                 }
@@ -176,6 +207,28 @@ public static class Map
 
 			return false;
             
+		}
+
+		public static GameObject Enemy()
+		{
+			while(true)
+			{
+				int x = Random.Range (1, Width - 1);
+				int y = Random.Range (1, Height - 1);
+				
+				if(!IsEmpty (x, y))
+				{
+					continue;
+				}
+				
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+				
+				quad.AddComponent<Enemy>();
+				
+				quad.transform.position = new Vector2(x, y);
+				
+				return quad;
+			}
 		}
 
 		public static bool[,] Floors {
@@ -217,32 +270,162 @@ public static class Map
 
 		public static bool Hall()
 		{
-			bool Created = false;
+			int loops = 0;
 
-			int x = Random.Range (1, (Width >> 1) - 1);
-			int y = Random.Range (1, (Height >> 1) - 1);
-			
-            x <<= 1;
-            y <<= 1;
+			int x;
+			int y;
 
 			while(true)
 			{
-				for(int xx = -1; xx <= 1; xx++)
+				if(++loops > 100)
 				{
-					for(int yy = -1; yy <= 1; yy++)
-					{
-						int xxx = x + xx;
-						int yyy = y + yy;
-						
-	                    if(Walls[xxx, yyy] != null)
-	                    {
-							return Created;
-	                    }
-	                }
-	            }
+					return false;
+				}
+
+				x = Random.Range (1, (Width >> 1) - 1);
+				y = Random.Range (1, (Height >> 1) - 1);
+
+				x <<= 1;
+				y <<= 1;
+
+				if(!IsEmpty (1, x, y))
+				{
+					continue;
+				}
+
+				break;
 			}
+
+			int length = 0;
+
+			loops = 0;
+
+			while(true)
+			{
+				if(++loops > 25)
+				{
+					break;
+				}
+
+				int xx = x;
+				int yy = y;
+
+				switch(Random.Range (1, 4))
+				{
+					case 1:
+						xx -= 2;
+						break;
+
+					case 2:
+						xx += 2;
+						break;
+
+					case 3:
+						yy -= 2;
+						break;
+
+					case 4:
+						yy -= 2;
+						break;
+
+					default:
+						continue;
+				}
+
+				if(!IsEmpty (1, xx, yy))
+				{
+					continue;
+				}
+
+				for(int xxx = Mathf.Min (x, xx); xxx <= Mathf.Max (x, xx); xxx++)
+				{
+					for(int yyy = Mathf.Min (y, yy); yyy <= Mathf.Max (y, yy); yyy++)
+					{
+						Wall (xxx,yyy);
+					}
+				}
+
+				length++;
+			}
+
+			return length > 0;
         }
-        
+
+		private static bool IsEmpty(int border, int x, int y)
+		{
+			if(border == 0)
+			{
+				return Walls[x, y] == null;
+			}
+
+			for(int xx = -border; xx <= border; xx++)
+			{
+				for(int yy = -border; yy <= border; yy++)
+				{
+					int xxx = x + xx;
+
+					if(xxx < 0)
+					{
+						return false;
+					}
+					
+					if(xxx >= Width)
+					{
+						return false;
+					}
+
+					int yyy = y + yy;
+
+					if(yyy < 0)
+					{
+						return false;
+					}
+
+					if(yyy >= Height)
+					{
+						return false;
+					}
+					
+					if(Walls[xxx, yyy] != null)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		private static bool IsEmpty(int x, int y)
+		{
+			return IsEmpty (0, x, y);
+		}
+
+		public static GameObject Item()
+		{
+			while(true)
+			{
+				int x = Random.Range (1, (Width >> 1) - 1);
+				int y = Random.Range (1, (Height >> 1) - 1);
+
+				x <<= 1;
+				y <<= 1;
+
+				if(!IsEmpty (x,y))
+				{
+					continue;
+				}
+
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+				quad.AddComponent<Item>();
+
+				quad.transform.position = new Vector2(x, y);
+
+				return quad;
+			}
+		}
+
 		public static bool Pillar()
 		{
 			int x = Random.Range (1, (Width >> 1) - 1);
@@ -251,18 +434,9 @@ public static class Map
 			x <<= 1;
 			y <<= 1;
 
-			for(int xx = -1; xx <= 1; xx++)
-            {
-				for(int yy = -1; yy <= 1; yy++)
-				{
-					int xxx = x + xx;
-					int yyy = y + yy;
-
-					if(Walls[xxx, yyy] != null)
-					{
-						return false;
-					}
-				}
+			if(!IsEmpty (1, x, y))
+			{
+				return false;
 			}
 
 			if(!Wall (x, y))
@@ -279,6 +453,39 @@ public static class Map
             }
 
 			return true;
+		}
+
+		public static GameObject Player()
+		{
+			if(Map.Player != null)
+			{
+				return Map.Player.gameObject;
+			}
+
+			while(true)
+			{
+				int x = Random.Range (1, Width - 1);
+				int y = Random.Range (1, Height - 1);
+				
+				if(!IsEmpty (x, y))
+				{
+					continue;
+				}
+				
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+				Map.Player = quad.AddComponent<Player>();
+				
+				quad.transform.position = new Vector2(x, y);
+
+				return quad;
+			}
+		}
+
+		public static void Reset()
+		{
+			Floors = null;
+			Floors = new bool[Width, Height];
 		}
 
 		public static bool Room()
