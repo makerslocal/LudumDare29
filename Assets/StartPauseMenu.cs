@@ -1,11 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-//test
-
-public class StartMenu: MonoBehaviour {
+public class StartPauseMenu: MonoBehaviour {
 	public GUISkin gooey = null;
 	public Texture2D logo;
+	public Texture2D frozen;
 	public Vector2 scrollPosition = Vector2.zero;
 
 	bool WindowMain = true;
@@ -20,6 +19,7 @@ public class StartMenu: MonoBehaviour {
 
 	void OnGUI () {
 		logo = Resources.Load <Texture2D> ("Game_Logo_Ideas_v2");
+		frozen = Resources.Load <Texture2D> ("frozen");
 		GUI.skin = gooey;
 		IsPauseMenu = false;
 
@@ -27,26 +27,29 @@ public class StartMenu: MonoBehaviour {
 
 		if(WindowMain)
 		{
+			//GUI.Box (new Rect(0, 0, Screen.width, Screen.height), frozen, GUIStyle.none);
+			// Works when image import settings in editor are corrected, but did something different with cameras for now
 			GUI.Box(new Rect((Screen.width-1024)/2, (Screen.height-512)/7, Screen.width, Screen.height), logo, GUIStyle.none);
 		}
-		if(WindowMain || WindowPause)
+		if(WindowMain)
+			// Removed "|| WindowPause" for testing
 		{
 			GUILayout.Window(1, windowRect, DoWindowMain, "", GUIStyle.none, GUILayout.MinWidth (200), GUILayout.MinHeight (100));
 		}
 
 		if(WindowMechanics)
 		{
-			GUILayout.Window(2, windowRect, DoWindowMechanics, "Game Mechanics", GUILayout.MinWidth(200), GUILayout.MaxWidth(600));
+			GUILayout.Window(2, new Rect((Screen.width-500)/2, 200, 500, 400), DoWindowMechanics, "Welcome to I.C.E.: Beneath the Cloud!");
 		}
 
 		if (WindowBackground) 
 		{
-			GUILayout.Window (3, new Rect((Screen.width-700)/2, 200, 700, 400), DoWindowBackground, "");
+			GUILayout.Window (3, new Rect((Screen.width-700)/2, 200, 700, 400), DoWindowBackground, "In the year 2076...");
 		}
 
 		if (WindowCredits) 
 		{
-			GUI.Window (4, new Rect((Screen.width-300)/2, 100, 300, 530), DoWindowCredits, "");
+			GUI.Window (4, new Rect((Screen.width-300)/2, 100, 300, 650), DoWindowCredits, "I.C.E was created by");
 		}
 		if (IsPauseMenu && Paused)
 		{
@@ -55,7 +58,7 @@ public class StartMenu: MonoBehaviour {
 	}
 
 	void DoWindowMain(int windowID) {
-		if(!IsPauseMenu){
+		//if(!IsPauseMenu){
 			if (GUILayout.Button("Start"))
 			{
 				WindowMain = false;
@@ -65,15 +68,16 @@ public class StartMenu: MonoBehaviour {
 				// Automatically load a random level after
 				//IsPauseMenu = true;
 			}
-		}
-		else
-		{
-			if(GUILayout.Button ("Resume"))
-			{
-				Paused = false;
-				WindowPause = false;
-			}
-		}
+		//}
+		//else
+		//{
+		//	if(GUILayout.Button ("Resume"))
+		//	{
+		//		Paused = false;
+		//		WindowPause = false;
+		//	}
+		//}
+
 		if (GUILayout.Button ("How to Play"))
 		{
 			WindowMain = false;
@@ -102,8 +106,7 @@ public class StartMenu: MonoBehaviour {
 
 		if(one)
 		{
-			GUILayout.Label ("<b>Welcome to I.C.E.: Beneath the Cloud!</b>" +
-							"\n\nI.C.E. is a thrilling corporate espionage game set " +
+			GUILayout.Label ("\nI.C.E. is a thrilling corporate espionage game set " +
 							"in the dystopian future.  This is a guide to walk you " +
 							"through the basic control interface and some of the " +
 							"interactions the player can make." +
@@ -118,6 +121,7 @@ public class StartMenu: MonoBehaviour {
 							"press the space bar." +
 							"\n\nThe escape key pauses the game and brings up the menu " +
 							"system.  You can resume or quit the game here.");
+			GUILayout.BeginHorizontal ();
 			if(GUILayout.Button("Back"))
 			{
 				one = false;
@@ -128,7 +132,9 @@ public class StartMenu: MonoBehaviour {
 			{
 				one = false;
 				two = true;
+				Debug.Log ("Clicked");
 			}
+			GUILayout.EndHorizontal ();
 		}
 		if(two)
 		{
@@ -191,19 +197,18 @@ public class StartMenu: MonoBehaviour {
 	}
 
 	void DoWindowBackground(int WindowID) {
-		GUILayout.Label("<b>In the year 2076...</b>" +
-		                "\n\nCatalyst, a daring activist, was framed for bombing a " +
+		GUILayout.Label("\nCatalyst, a daring activist, was framed for bombing a " +
 		                "Cloud(TM) clinic by the malicious oligarchy of Happy Corp. " +
 		                "Catalyst was thrown in a high security prison known as " +
 		                "\"The Pit,\" a facility located on the ocean floor." +
 		                "\n\nThe Pit contains some of the worst villains against humanity, " +
 		                "as well as the political prisoners that Happy Corp needs to " +
-		                "silence but not outright kill. Down in the Pit, the Catalyst meets" +
-		                "Scamall, the original developer of Cloud(TM). Scamall reveals a" +
-		                "security flaw: Cloud(TM)'s visual identity could be compromised " +
-		                "and the image projection could be manipulated by a conscious " +
-		                "hacker." +
-		                "\n\nUsing this information, Catalyst stages a breakout and " +
+		                "silence but not outright kill. Down in the Pit, the Catalyst " +
+		                "meets Scamall, the original developer of Cloud(TM). Scamall " +
+		                "reveals a security flaw: Cloud(TM)'s visual identity could be " +
+		                "compromised and the image projection could be manipulated by a " +
+		                "conscious hacker." +
+		                "\n\nUsing this information, the Catalyst stages a breakout and " +
 		                "escapes the Pit. After meeting with the most loyal members of " +
 		                "Activist Group, the Catalyst pieces together a plan to destroy " +
 		                "Happy Corp from the inside out and destroy the oppressive " +
@@ -220,8 +225,10 @@ public class StartMenu: MonoBehaviour {
 	}
 
 	void DoWindowCredits(int WindowID) {
-		GUILayout.Label("<b>I.C.E was created by</b>" +
-		                "\n\nChris \"ctag\" Bero" +
+		GUILayout.Label("\nTeam Makers Local 256" +
+						"\n+ C63 Industries" +
+						"\nWith Special Guest Artist Ben" +
+						"\n\nChris \"ctag\" Bero" +
 		                "\nDavid \"Nyk O'Demus\" Brooks" +
 		                "\nBen Diefenbach" +
 		                "\nCharlotte \"Charlaxy\" Ellett" +
@@ -238,6 +245,7 @@ public class StartMenu: MonoBehaviour {
 		                "\nTempting Secrets, Black Vortex, Day of Chaos" +
 		                "\n\nMike Koenig:" +
 		                "\nknife sharpening, stab, groan, suction, pain, swoosh" +
+		                "\n\nWe thank you for playing!" +
 		                "\n");
 		if (GUILayout.Button ("Back")) 
 		{
