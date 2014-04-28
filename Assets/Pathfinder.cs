@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
@@ -106,6 +107,39 @@ public class Pathfinder : MonoBehaviour
 			}
 
 			return _Data[startX, startY, goalX, goalY];
+		}
+
+		public static void PreCache()
+		{
+			int offset = 4;
+
+			DateTime dateTime = DateTime.Now;
+
+			for(int x = 1; x < Map.Width; x += offset)
+			{
+				for(int y = 1; y < Map.Height; y += offset)
+				{
+					if(Map.Walls[x, y] != null)
+					{
+						continue;
+					}
+
+					for(int xx = 1; xx < Map.Width; xx += offset)
+					{
+						for(int yy = 1; yy < Map.Height; yy += offset)
+						{
+							if(Map.Walls[xx, yy] != null)
+							{
+								continue;
+							}
+
+							FindPath (x, y, xx, yy);
+						}
+					}
+				}
+			}
+
+			Debug.Log ("PreCaching Seconds: " + DateTime.Now.Subtract (dateTime).Seconds.ToString ());
 		}
 
 		public static void Save(int startX, int startY, int goalX, int goalY, List<Point> data)

@@ -14,20 +14,20 @@ public class Player : Moving {
 			{"Attack", new Dictionary<Direction, Texture2D[]>
 			{
 				{ Direction.Up, new[] { Resources.Load<Texture2D>("player_attack_1-1"), Resources.Load<Texture2D>("player_attack_1-2") } },
+				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_attack_2-1"), Resources.Load<Texture2D>("player_attack_2-2") } },
 				{ Direction.Down, new[] { Resources.Load<Texture2D>("player_attack_3-1"), Resources.Load<Texture2D>("player_attack_3-2") } },
-				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_attack_4-1"), Resources.Load<Texture2D>("player_attack_4-2") } },
 			}},
 			{"Idle", new Dictionary<Direction, Texture2D[]>
 			{
 				{ Direction.Up, new[] { Resources.Load<Texture2D>("player_idle_1") } },
+				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_idle_2") } },
 				{ Direction.Down, new[] { Resources.Load<Texture2D>("player_idle_3") } },
-				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_idle_4") } },
 			}},
 			{"Walk", new Dictionary<Direction, Texture2D[]>
 			{
 				{ Direction.Up, new[] { Resources.Load<Texture2D>("player_walk_1-1"), Resources.Load<Texture2D>("player_walk_1-2") } },
+				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_walk_2-1"), Resources.Load<Texture2D>("player_walk_2-2") } },
 				{ Direction.Down, new[] { Resources.Load<Texture2D>("player_walk_3-1"), Resources.Load<Texture2D>("player_walk_3-2") } },
-				{ Direction.Left, new[] { Resources.Load<Texture2D>("player_walk_4-1"), Resources.Load<Texture2D>("player_walk_4-2") } },
 			}},
 		};
     }
@@ -98,9 +98,9 @@ public class Player : Moving {
 		Direction direction = Direction;
 		bool mirror = false;
         
-		if(direction == Direction.Right)
+		if(direction == Direction.Left)
 		{
-			direction = Direction.Left;
+			direction = Direction.Right;
 			mirror = true;
 		}
 
@@ -108,13 +108,13 @@ public class Player : Moving {
 
 		if(!Move (x, y) || (x == 0 && y == 0))
 		{
-			texture = Textures["Idle"][direction][Frames % Textures["Idle"][direction].Length];
+			//texture = Textures["Idle"][direction][Frames % Textures["Idle"][direction].Length];
         }
 		else
 		{
 			Frames++;
 
-			texture = Textures["Walk"][direction][Frames % Textures["Walk"][direction].Length];
+			//texture = Textures["Walk"][direction][Frames % Textures["Walk"][direction].Length];
         }
 
 		Debug.Log (Direction);
