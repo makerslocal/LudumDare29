@@ -153,6 +153,7 @@ public class StoryWindows : MonoBehaviour {
 			break;
 
 		case 5:
+<<<<<<< HEAD
 			GUILayout.Label ("\n");
 
 			if(GUILayout.Button ("Back"))
@@ -171,3 +172,6 @@ public class StoryWindows : MonoBehaviour {
 		}
 	}
 }
+=======
+			GUILayout.Label ("\n
+>>>>>>> a7ced474ac17dd349eb6981292cb485e3ce9b67b
