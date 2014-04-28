@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// A node class for doing pathfinding on a 2-dimensional map
 /// </summary>
-public class AStarNode2D : AStarNode
+public class AStarNode2D : IComparable
 {
 	#region Properties
 
@@ -33,6 +33,83 @@ public class AStarNode2D : AStarNode
 	}
 	private int FY;
 
+	private AStarNode2D FParent;
+	/// <summary>
+	/// The parent of the node.
+	/// </summary>
+	public AStarNode2D Parent
+	{
+		get
+		{
+			return FParent;
+		}
+		set
+		{
+			FParent = value;
+		}
+	}
+
+	/// <summary>
+	/// The accumulative cost of the path until now.
+	/// </summary>
+	public double Cost 
+	{
+		set
+		{
+			FCost = value;
+		}
+		get
+		{
+			return FCost;
+		}
+	}
+	private double FCost;
+	
+	/// <summary>
+	/// The estimated cost to the goal from here.
+	/// </summary>
+	public double GoalEstimate 
+	{
+		set
+		{
+			FGoalEstimate = value;
+		}
+		get 
+		{
+			Calculate();
+			return(FGoalEstimate);
+		}
+	}
+	private double FGoalEstimate;
+	
+	/// <summary>
+	/// The cost plus the estimated cost to the goal from here.
+	/// </summary>
+	public double TotalCost
+	{
+		get 
+		{
+			return(Cost + GoalEstimate);
+		}
+	}
+	
+	/// <summary>
+	/// The goal node.
+	/// </summary>
+	public AStarNode2D GoalNode 
+	{
+		set 
+		{
+			FGoalNode = value;
+			Calculate();
+		}
+		get
+		{
+			return FGoalNode;
+		}
+	}
+	private AStarNode2D FGoalNode;
+
 	#endregion
 
 	#region Constructors
@@ -45,10 +122,32 @@ public class AStarNode2D : AStarNode
 	/// <param name="ACost">Accumulative cost</param>
 	/// <param name="AX">X-coordinate</param>
 	/// <param name="AY">Y-coordinate</param>
-	public AStarNode2D(AStarNode AParent,AStarNode AGoalNode,double ACost,int AX, int AY) : base(AParent,AGoalNode,ACost)
+
+	public AStarNode2D(AStarNode2D AParent,AStarNode2D AGoalNode,double ACost,int AX, int AY)
 	{
+		FParent = AParent;
+		FCost = ACost;
+		GoalNode = AGoalNode;
 		FX = AX;
 		FY = AY;
+	}
+
+	#endregion
+
+	#region
+
+	/// <summary>
+	/// Determines wheather the current node is the goal.
+	/// </summary>
+	/// <returns>Returns true if current node is the goal</returns>
+	int goalcheckcount = 0;
+	public bool IsGoal()
+	{
+		goalcheckcount++;
+		if (goalcheckcount > 1000) {
+			return IsSameState(FGoalNode);
+		}
+		return IsSameState(FGoalNode);
 	}
 
 	#endregion
@@ -69,7 +168,7 @@ public class AStarNode2D : AStarNode
 			return;
 		}
 		AStarNode2D NewNode = new AStarNode2D(this, GoalNode, Cost + CurrentCost, AX, AY);
-		if(NewNode.IsSameState(Parent)) 
+		if(Parent != null && NewNode.IsSameState(Parent)) 
 		{
 			return;
 		}
@@ -78,34 +177,30 @@ public class AStarNode2D : AStarNode
 
 	private int GetMap(int x, int y)
 	{
-		Debug.Log ("getmap: " + x + " " + y);
+		//Debug.Log ("getmap: " + x + " " + y);
 
 		if ((x < 0) || (x >= Map.Width)) {
-			Debug.Log("error with x");
 			return(-1);
 		}
 		if ((y < 0) || (y >= Map.Height)) {
-			Debug.Log ("error with x");
 			return(-1);
 		}
 
 		bool wall = (Map.Walls [x, y] == null);
-
-		Debug.Log ("wall?: " + Map.Walls [x, y] == null);
 
 		return(wall ? 9999 : 1);
 	}
 
 	#endregion
 
-	#region Overidden Methods
+	#region Public Methods
 
 	/// <summary>
 	/// Determines wheather the current node is the same state as the on passed.
 	/// </summary>
 	/// <param name="ANode">AStarNode to compare the current node to</param>
 	/// <returns>Returns true if they are the same state</returns>
-	public override bool IsSameState(AStarNode ANode)
+	public bool IsSameState(AStarNode2D ANode)
 	{
 		if(ANode == null) 
 		{
@@ -118,7 +213,7 @@ public class AStarNode2D : AStarNode
 	/// <summary>
 	/// Calculates the estimated cost for the remaining trip to the goal.
 	/// </summary>
-	public override void Calculate()
+	public void Calculate()
 	{
 		if(GoalNode != null) 
 		{
@@ -134,7 +229,7 @@ public class AStarNode2D : AStarNode
 		}
 		else
 		{
-			GoalEstimate = 0;
+			GoalEstimate = 0.0f;
 		}
 	}
 
@@ -142,7 +237,7 @@ public class AStarNode2D : AStarNode
 	/// Gets all successors nodes from the current node and adds them to the successor list
 	/// </summary>
 	/// <param name="ASuccessors">List in which the successors will be added</param>
-	public override void GetSuccessors(ArrayList ASuccessors)
+	public void GetSuccessors(ArrayList ASuccessors)
 	{
 		ASuccessors.Clear();
 		AddSuccessor(ASuccessors,FX-1,FY  );
@@ -156,4 +251,28 @@ public class AStarNode2D : AStarNode
 	}
 
 	#endregion
+
+	#region Overridden Methods
+
+	public override bool Equals(object obj)
+	{
+		return IsSameState((AStarNode2D)obj);
+	}
+	
+	public override int GetHashCode()
+	{
+		return base.GetHashCode();
+	}
+	
+	#endregion
+	
+	#region IComparable Members
+	
+	public int CompareTo(object obj)
+	{
+		return(-TotalCost.CompareTo(((AStarNode2D)obj).TotalCost));
+	}
+	
+	#endregion
+
 }

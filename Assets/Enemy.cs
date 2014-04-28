@@ -20,11 +20,10 @@ public class Enemy : Moving {
 	{
 		if (player == null) {
 			player = Map.Player.transform;
-		}
-		
-		if (player == null) {
 			return;
 		}
+
+		done = true;
 
 		AStar astar = new AStar();
 		
@@ -56,8 +55,8 @@ public class Enemy : Moving {
 			}
 
 			AStarNode2D firstStep = (AStarNode2D)astar.Solution[1];
-			Move (firstStep.X - startx, firstStep.Y - starty);
-			//Move (startx, starty);
+			//Move (firstStep.X - startx, firstStep.Y - starty);
+			Move (startx, starty);
 		}
 	}
 	
@@ -65,9 +64,6 @@ public class Enemy : Moving {
 	{
 		if (player == null) {
 			player = Map.Player.transform;
-		}
-		
-		if (player == null) {
 			return;
 		}
 		
@@ -99,14 +95,13 @@ public class Enemy : Moving {
 
 	void Update () {
 		
-		if (++Frame % 60 > 0) {
+		if (++Frame % 200 > 0) {
 			return;
 		}
 
-		//if (!done) {
+		if (!done) {
 			Chase ();
-			//done = true;
-		//}
+		}
 		
 		//Flee ();
 		//Chase ();

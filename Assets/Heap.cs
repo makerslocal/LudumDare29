@@ -133,7 +133,10 @@ public class Heap : IList, ICloneable
 		{
 			int Index = IndexOf(O);
 			int NewIndex = Index>=0 ? Index : -Index-1;
-			if (NewIndex>=Count) FList.Add(O);
+			if (NewIndex>=Count) {
+				//Debug.Log("adding to flist");
+				FList.Add(O);
+			}
 			else FList.Insert(NewIndex, O);
 			Return = NewIndex;
 		}
@@ -227,7 +230,8 @@ public class Heap : IList, ICloneable
 	/// <param name="Value">The object whose value must be removed if found in the list.</param>
 	public void Remove(object Value) 
 	{ 
-		FList.Remove(Value); 
+		while (FList.Contains(Value))
+			FList.Remove(Value);
 	}
 
 	/// <summary>
@@ -236,7 +240,7 @@ public class Heap : IList, ICloneable
 	/// </summary>
 	/// <param name="Index">Index of object to remove.</param>
 	public void RemoveAt(int Index) 
-	{ 
+	{
 		FList.RemoveAt(Index); 
 	}
 
