@@ -96,7 +96,10 @@ public class StartMenu: MonoBehaviour {
 	}
 	
 	void DoWindowMechanics(int windowID) {
-		bool one = true, two, three = false;
+		bool one = true;
+		bool two = false;
+		bool three = false;
+
 		if(one)
 		{
 			GUILayout.Label ("<b>Welcome to I.C.E.: Beneath the Cloud!</b>" +
