@@ -3,6 +3,8 @@ LD29
 
 ### Ludum Dare 29 [2014] - *Beneath the Surface*
 
+![Game Logo][Assets/Resources/Game_Logo_Ideas_v2.png]
+
 **The year is 2076** and our world is a wasteland of
 nuclear fallout and deadly trains. To this end, humanity 
 has migrated to the only pristine location left on 
@@ -29,7 +31,7 @@ You are *The Catalyst* and the Cloud must be stopped.
 | Hunter “hfuller” Fuller | Music & Sounds |
 | William “Mr. Tuttle” LeBlanc | Music $ Sounds |
 | Patrick “King” Phillips | Game Mechanics, Story |
-| Chris “ctag” Bero | Story |
+| Christopher “ctag” Bero | Couch Warmer |
 | Raymond “strages” Nordin, III | Story |
 | Daniel “Sunshine Dan” Rhodes | Story |
 | Leon “Noel” Kennedy | Artwork |
