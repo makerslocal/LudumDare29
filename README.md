@@ -38,4 +38,4 @@ You are *The Catalyst* and the Cloud must be stopped.
 | Ashley “Ultimae” West | Artwork |
 
 
-[logo]: https://github.com/brodavi/LD29/blob/master/Assets/Resources/Game_Logo_Ideas_v2.png "Game Logo"
+[logo]: https://github.com/brodavi/LD29/raw/master/Assets/Resources/Game_Logo_Ideas_v2.png "Game Logo"
