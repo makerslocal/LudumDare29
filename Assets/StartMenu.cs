@@ -1,38 +1,44 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class StartMenu: MonoBehaviour {
 	public GUISkin gooey = null;
-	public Texture2D placeholder;
+	public Texture2D logo;
+	public Vector2 scrollPosition = Vector2.zero;
 
 	bool WindowMain = true;
-	bool WindowMechanics = false;
-	bool WindowCredits = false;
+	bool WindowMechanics, WindowCredits, WindowBackground = false;
 
 	void OnGUI () {
-		GUI.skin = gooey;
+		logo = Resources.Load <Texture2D> ("logo");
+		GUI.skin = gooey; 
 
-		Rect windowRect = new Rect(Screen.width*0.45f, Screen.height*0.45f, 0, 0);
-		Rect windowRect1 = new Rect ((Screen.width/2)-250, (Screen.height/2)-250, 500, 500);
+		Rect windowRect = new Rect((Screen.width-200)/2, (Screen.height-100)/1.4f, 200, 100);
+		Rect windowRect1 = new Rect ((Screen.width-500)/2, (Screen.height-500)/2, 500, 500);
 
 		if(WindowMain)
 		{
-			windowRect = GUILayout.Window(0, windowRect, DoWindowMain, placeholder, GUILayout.MinWidth(200), GUILayout.MaxWidth(1000));
+			GUI.Box(new Rect((Screen.width-1024)/2, (Screen.height-512)/7, Screen.width, Screen.height), logo, GUIStyle.none);
+			GUILayout.Window(1, windowRect, DoWindowMain, "", GUIStyle.none, GUILayout.MinWidth (200), GUILayout.MinHeight (100));
 		}
 
 		if(WindowMechanics)
 		{
-			windowRect = GUILayout.Window(1, windowRect, DoWindowMechanics, "Game Mechanics", GUILayout.MinWidth(200), GUILayout.MaxWidth(1000));
+			GUILayout.Window(2, windowRect, DoWindowMechanics, "Game Mechanics", GUILayout.MinWidth(200), GUILayout.MaxWidth(600));
+		}
+
+		if (WindowBackground) 
+		{
+			GUILayout.Window (3, windowRect, DoWindowBackground, "In the year 2076...", GUILayout.MinWidth(200), GUILayout.MaxWidth(600));
 		}
 
 		if (WindowCredits) 
 		{
-			windowRect = GUILayout.Window (2, windowRect, DoWindowCredits, "Credits", GUILayout.MinWidth(200), GUILayout.MaxWidth(1000));
+			GUI.Window (4, new Rect((Screen.width-300)/2, 100, 300, 600), DoWindowCredits, "");
 		}
 	}
 
 	void DoWindowMain(int windowID) {
-		GUILayout.Label("Main Menu");
 		if (GUILayout.Button("Start"))
 		{
 			WindowMain = false;
@@ -44,6 +50,11 @@ public class StartMenu: MonoBehaviour {
 		{
 			WindowMain = false;
 			WindowMechanics = true;
+		}
+		if(GUILayout.Button ("Background"))
+		{
+			WindowMain = false;
+			WindowBackground = true;
 		}
 		if (GUILayout.Button ("Credits")) 
 		{
@@ -60,7 +71,43 @@ public class StartMenu: MonoBehaviour {
 		}
 	}
 
+	void DoWindowBackground(int WindowID) {
+		if(GUILayout.Button("Back"))
+		{
+			WindowMain = true;
+			WindowBackground = false;
+		}
+	}
+
 	void DoWindowCredits(int WindowID) {
+		GUILayout.BeginScrollView(scrollPosition, GUILayout.Width (280), GUILayout.Height (550));
+		GUILayout.Label("Credits" +
+		                "\n\nArt:" +
+		                "\nBen Diefenbach" +
+		                "\nLeon \"Noel\" Kennedy" +
+		                "Ashley \"Ultimae\" West" +
+		                "\n\nMechanics:" +
+		                "\nCharlotte \"Charlaxy\" Ellett" +
+		                "\nPatrick \"King\" Phillips" +
+		                "\nJesse \"Wolfenhex\" Schirmer" +
+		                "\n\nMusic & Sounds: Attributed:" +
+		                "\nKevin Macleod: Tempting Secrets, Black Vortex, Day of Chaos" +
+		                "\nMike Koenig: knife sharpening, stab, groan, suction, pain, swoosh" +
+		                "\n\nMusic & Sounds: Original:" +
+		                "\nHunter \"hfuller\" Fuller" +
+		                "\nWilliam \"Mr. Tuttle\" LeBlanc" +
+		          		"\n\nProgramming:" +
+		          		"\nDavid \"Nyk O'Demus\" Brooks" +
+		          		"\nCharlotte \"Charlaxy\" Ellett" +
+		          		"\nJesse \"Wolfenhex\" Schirmer" +
+		          		"\n\nStory:" +
+		          		"\nChris \"ctag\" Bero" +
+		          		"\nCharlotte \"Charlaxy\" Ellett" +
+		          		"\nRaymond \"strages\" Nordin, III" +
+		          		"\nPatrick \"King\" Phillips" +
+		          		"\nDaniel \"Sunshine Dan\" Rhodes" +
+		          		"\nJesse \"Wolfenhex\" Schirmer");
+		GUILayout.EndScrollView ();
 		if (GUILayout.Button ("Back")) 
 		{
 			WindowMain = true;
