@@ -7,6 +7,7 @@ public class Player : Moving {
 
 	public Player() : base()
 	{
+		gameObject.AddComponent<StoryWindows>();
 		Direction = Direction.Down;
 
 		Textures = new Dictionary<string, Dictionary<Direction, Texture2D[]>>()
