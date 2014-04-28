@@ -43,19 +43,40 @@ public class Player : Moving {
 		get;
 		private set;
 	}
+	
+	private GameObject[] visualizationSquares;
+	private Pathfinder.Point[] visibleSquares;
 
 	void Start () {
 
 		Map.Player = this;
 
+		visualizationSquares = new GameObject[1000];
+
 		while(!Move (0,0))
 		{
 			transform.position = new Vector2 (Random.Range (0, Map.Width), Random.Range (0, Map.Height));
 		}
+
 	}
-	
+
+	bool renderedFOV = false;
 	void Update ()
 	{
+		if (!renderedFOV) {
+			renderedFOV = true;
+
+			visibleSquares = FieldOfView.GetVisibleSquares (Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), this.Direction, 0, 5);
+			for (int q = 0; q < visibleSquares.Length; q++) {
+				GameObject o = GameObject.CreatePrimitive(PrimitiveType.Quad);
+				o.renderer.material.color = Color.blue;
+
+				o.transform.localScale = new Vector3(0.5f, 0.5f, 1.0f);
+				visualizationSquares[q] = o;
+			}
+			Debug.Log("the cone should be visible");
+		}
+
 		int x = 0;
 		int y = 0;
 
