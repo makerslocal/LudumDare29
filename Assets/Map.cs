@@ -726,10 +726,14 @@ public static class Map
             Texture2D[] textures = new Texture2D[256];
 
 			textures[0] = Resources.Load<Texture2D>("floor_0");
+			textures[1] = Resources.Load<Texture2D>("floor_1");
+			textures[4] = Resources.Load<Texture2D>("floor_4");
 			textures[5] = Resources.Load<Texture2D>("floor_5");
+			textures[16] = Resources.Load<Texture2D>("floor_16");
 			textures[17] = Resources.Load<Texture2D>("floor_17");
 			textures[20] = Resources.Load<Texture2D>("floor_20");
 			textures[21] = Resources.Load<Texture2D>("floor_21");
+			textures[64] = Resources.Load<Texture2D>("floor_64");
 			textures[65] = Resources.Load<Texture2D>("floor_65");
 			textures[68] = Resources.Load<Texture2D>("floor_68");
 			textures[69] = Resources.Load<Texture2D>("floor_69");

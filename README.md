@@ -1,7 +1,13 @@
 LD29
 ====
 
-### Ludum Dare 29 [2014] - *Beneath the Surface*
+### Ludum Dare 29 [April 2014] - *Beneath the Surface*
+
+---
+
+![Alt text][logo]
+
+
 
 **The year is 2076** and our world is a wasteland of
 nuclear fallout and deadly trains. To this end, humanity 
@@ -15,9 +21,9 @@ Self augmentation and perception alteration becomes a
 norm as nanomachines, referred to as *clouds*, are 
 developed by megacorporations to envelope users and 
 provide lifestyle and utility services at the cost of
-personal freedome.
+personal freedom.
 
-**Welcome to ICE.** 
+**Welcome to ICE.**
 You are *The Catalyst* and the Cloud must be stopped.
 
 
@@ -29,9 +35,11 @@ You are *The Catalyst* and the Cloud must be stopped.
 | Hunter “hfuller” Fuller | Music & Sounds |
 | William “Mr. Tuttle” LeBlanc | Music $ Sounds |
 | Patrick “King” Phillips | Game Mechanics, Story |
-| Chris “ctag” Bero | Story |
+| Christopher “ctag” Bero | Couch Warmer |
 | Raymond “strages” Nordin, III | Story |
 | Daniel “Sunshine Dan” Rhodes | Story |
 | Leon “Noel” Kennedy | Artwork |
 | Ashley “Ultimae” West | Artwork |
 
+
+[logo]: https://github.com/brodavi/LD29/raw/master/Assets/Resources/Game_Logo_Ideas_v2.png "Game Logo"

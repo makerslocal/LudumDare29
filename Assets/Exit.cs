@@ -35,6 +35,6 @@ public class Exit : MonoBehaviour {
 			return;
 		}
 
-		Map.Generate ();
+		Application.LoadLevel (0);
 	}
 }
