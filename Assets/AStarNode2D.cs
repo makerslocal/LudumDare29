@@ -240,13 +240,13 @@ public class AStarNode2D : IComparable
 	{
 		ASuccessors.Clear();
 		AddSuccessor(ASuccessors,FX-1,FY  );
-		AddSuccessor(ASuccessors,FX-1,FY-1);
+		//AddSuccessor(ASuccessors,FX-1,FY-1);
 		AddSuccessor(ASuccessors,FX  ,FY-1);
-		AddSuccessor(ASuccessors,FX+1,FY-1);
+		//AddSuccessor(ASuccessors,FX+1,FY-1);
 		AddSuccessor(ASuccessors,FX+1,FY  );
-		AddSuccessor(ASuccessors,FX+1,FY+1);
+		//AddSuccessor(ASuccessors,FX+1,FY+1);
 		AddSuccessor(ASuccessors,FX  ,FY+1);
-		AddSuccessor(ASuccessors,FX-1,FY+1);
+		//AddSuccessor(ASuccessors,FX-1,FY+1);
 	}
 
 	#endregion
