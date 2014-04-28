@@ -163,10 +163,9 @@ public class AStarNode2D : IComparable
 	private void AddSuccessor(ArrayList ASuccessors, int AX, int AY) 
 	{
 		int CurrentCost = GetMap(AX, AY);
-		if(CurrentCost == -1) 
-		{
+		if(CurrentCost != 1) 
 			return;
-		}
+
 		AStarNode2D NewNode = new AStarNode2D(this, GoalNode, Cost + CurrentCost, AX, AY);
 		if(Parent != null && NewNode.IsSameState(Parent)) 
 		{
@@ -180,13 +179,13 @@ public class AStarNode2D : IComparable
 		//Debug.Log ("getmap: " + x + " " + y);
 
 		if ((x < 0) || (x >= Map.Width)) {
-			return(-1);
+			return(9999);
 		}
 		if ((y < 0) || (y >= Map.Height)) {
-			return(-1);
+			return(9999);
 		}
 
-		bool wall = (Map.Walls [x, y] == null);
+		bool wall = (Map.Walls [x, y] != null);
 
 		return(wall ? 9999 : 1);
 	}
@@ -223,9 +222,9 @@ public class AStarNode2D : IComparable
 			//GoalEstimate = Math.Sqrt((xd*xd) + (yd*yd));
 			// "Manhattan Distance" - Used when search can only move vertically and 
 			// horizontally.
-			//GoalEstimate = Math.Abs(xd) + Math.Abs(yd); 
+			GoalEstimate = Math.Abs(xd) + Math.Abs(yd); 
 			// "Diagonal Distance" - Used when the search can move in 8 directions.
-			GoalEstimate = Math.Max(Math.Abs(xd),Math.Abs(yd));
+			//GoalEstimate = Math.Max(Math.Abs(xd),Math.Abs(yd));
 		}
 		else
 		{

@@ -23,6 +23,7 @@ public class Enemy : Moving {
 			return;
 		}
 
+		// only calls Chase() once... for testing purposes
 		done = true;
 
 		AStar astar = new AStar();
@@ -40,7 +41,6 @@ public class Enemy : Moving {
 			// clear the visualization
 			for (int o = 0; o < vis.Length; o++) {
 				vis[o].renderer.enabled = false;
-				//Destroy(vis[o]);
 			}
 			
 			// let's visualize this
@@ -48,15 +48,13 @@ public class Enemy : Moving {
 			for (int s = 0; s < astar.Solution.Count; s++) {
 				step = (AStarNode2D)astar.Solution[s];
 
-				Debug.Log ("Step " + s + " X: " + step.X + " Y: " + step.Y);
-
 				vis[s].renderer.enabled = true;
 				vis[s].transform.position = new Vector2(step.X, step.Y);
 			}
 
 			AStarNode2D firstStep = (AStarNode2D)astar.Solution[1];
-			//Move (firstStep.X - startx, firstStep.Y - starty);
-			Move (startx, starty);
+			//Move (firstStep.X - startx, firstStep.Y - starty); // just take the first step... you'll recalculate the path next go around
+			Move (startx, starty); // don't move
 		}
 	}
 	
@@ -66,6 +64,8 @@ public class Enemy : Moving {
 			player = Map.Player.transform;
 			return;
 		}
+
+		done = true;
 		
 		if (player.position.y <= transform.position.y) {
 			Move (0, 1);
@@ -95,12 +95,13 @@ public class Enemy : Moving {
 
 	void Update () {
 		
-		if (++Frame % 200 > 0) {
+		if (++Frame % 60 > 0) {
 			return;
 		}
 
 		if (!done) {
 			Chase ();
+			// only calls Chase() once
 		}
 		
 		//Flee ();

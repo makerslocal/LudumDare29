@@ -10,7 +10,6 @@ public sealed class AStar
 	#region Private Fields
 
 	private AStarNode2D FStartNode;
-	private AStarNode2D FGoalNode;
 	private ArrayList FOpenList;
 	private ArrayList FClosedList;
 	private ArrayList FSuccessors;
@@ -68,17 +67,13 @@ public sealed class AStar
 	public void FindPath(AStarNode2D AStartNode,AStarNode2D AGoalNode)
 	{
 		FStartNode = AStartNode;
-		FGoalNode = AGoalNode;
 		int count = 0;
-		Debug.Log ("startnode: " + AStartNode.X + "," + AStartNode.Y);
-		Debug.Log ("goalnode: " + AGoalNode.X + "," + AGoalNode.Y);
 
 		FOpenList.Add(FStartNode);
 		while(FOpenList.Count > 0) 
 		{
 			count++;
-			if (count > 5000) {
-				Debug.Log ("5000 while iterations. FOpenList.Count: " + FOpenList.Count);
+			if (count > 3000) {
 				break;
 			}
 			AStarNode2D NodeCurrent = GetCheapest(FOpenList);
@@ -96,38 +91,61 @@ public sealed class AStar
 			NodeCurrent.GetSuccessors(FSuccessors);
 			foreach(AStarNode2D NodeSuccessor in FSuccessors)
 			{
+
+				// Algorithm from policyalmanac.org post-------------
+
+				// If it is not walkable or if it is on the closed list, ignore it.
+				if (NodeCurrent.TotalCost != 1 ||
+				    FClosedList.Contains (NodeSuccessor))
+					continue;
+
+				// If it isn’t on the open list, add it to the open list.
+				// Record the F, G, and H costs of the square. 
+				if (!FOpenList.Contains (NodeSuccessor))
+					FOpenList.Add(NodeSuccessor);
+
+				// Make the current square the parent of this square.
+				// done during get successors
+				//NodeSuccessor.Parent = NodeCurrent;
+
+				// Record the F, G, and H costs of the square.
+				// done during get successors
+
+				// Original algorithm --------------------------------
+
 				// Test if the current successor node is on the open list, if it is and
 				// the TotalCost is higher, we will throw away the current successor.
-				AStarNode2D NodeOpen = null;
-				if(FOpenList.Contains(NodeSuccessor)) {
-					NodeOpen = (AStarNode2D)FOpenList[FOpenList.IndexOf(NodeSuccessor)];
-				}
-				if((NodeOpen != null) && (NodeSuccessor.TotalCost > NodeOpen.TotalCost))
-					continue;
+
+//				AStarNode2D NodeOpen = null;
+//				if(FOpenList.Contains(NodeSuccessor)) {
+//					NodeOpen = (AStarNode2D)FOpenList[FOpenList.IndexOf(NodeSuccessor)];
+//				}
+//				if((NodeOpen != null) && (NodeSuccessor.TotalCost > NodeOpen.TotalCost))
+//					continue;
 				
 				// Test if the current successor node is on the closed list, if it is and
 				// the TotalCost is higher, we will throw away the current successor.
-				AStarNode2D NodeClosed = null;
-				if(FClosedList.Contains(NodeSuccessor)) {
-					NodeClosed = (AStarNode2D)FClosedList[FClosedList.IndexOf(NodeSuccessor)];
-				}
-				if((NodeClosed != null) && (NodeSuccessor.TotalCost > NodeClosed.TotalCost)) 
-		 			continue;
+
+//				AStarNode2D NodeClosed = null;
+//				if(FClosedList.Contains(NodeSuccessor)) {
+//					NodeClosed = (AStarNode2D)FClosedList[FClosedList.IndexOf(NodeSuccessor)];
+//				}
+//				if((NodeClosed != null) && (NodeSuccessor.TotalCost > NodeClosed.TotalCost)) 
+//		 			continue;
 				
 				// Remove the old successor from the open list
-				FOpenList.Remove(NodeOpen);
+				//FOpenList.Remove(NodeOpen);
 				//FOpenList.Remove(NodeSuccessor);
 				
 				// Remove the old successor from the closed list
-				FClosedList.Remove(NodeClosed);
+				//FClosedList.Remove(NodeClosed);
 				//FClosedList.Remove(NodeSuccessor);
 				
 				// Add the current successor to the open list
-				FOpenList.Add(NodeSuccessor);
+				//FOpenList.Add(NodeSuccessor);
 			}
 			// Add the current node to the closed list
-			Debug.Log("adding current node to closed list");
-			FClosedList.Add(NodeCurrent);
+			//FClosedList.Add(NodeCurrent);
 		}
 	}
 	
