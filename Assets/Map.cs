@@ -11,6 +11,7 @@ public static class Map
     public static void Clear()
 	{
 		Player = null;
+		Enemies = new List<Enemy>();
 
 		Walls = new GameObject[0,0];
 
@@ -63,7 +64,7 @@ public static class Map
 		Create.Item();
 		
 		Create.Player();
-		
+
 		Create.Enemy();
         Create.Enemy();
         Create.Enemy();
@@ -95,6 +96,11 @@ public static class Map
 	}
 
 	public static Player Player {
+		get;
+		set;
+	}
+
+	public static List<Enemy> Enemies {
 		get;
 		set;
 	}

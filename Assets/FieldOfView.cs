@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class FieldOfView : MonoBehaviour {
 	// From Author: Jason Morley (Source: http://www.morleydev.co.uk/blog/2010/11/18/generic-bresenhams-line-algorithm-in-visual-basic-net/)
@@ -15,10 +15,10 @@ public class FieldOfView : MonoBehaviour {
 	/// <returns>True to continue, false to stop the algorithm</returns>
 	public delegate bool PlotFunction(int x, int y);
 
-	public static Pathfinder.Point[] VisibleSquares;
+	public static List<Pathfinder.Point> VisibleSquares;
 	
-	public static Pathfinder.Point[] GetVisibleSquares (int x0, int y0, Moving.Direction d, int fov, int range) {
-		VisibleSquares = new Pathfinder.Point[1000];
+	public static List<Pathfinder.Point> GetVisibleSquares (int x0, int y0, Moving.Direction d, int fov, int range) {
+		VisibleSquares = new List<Pathfinder.Point>();
 
 		for (int p = -fov; p <= fov; p++) {
 			if (d == Moving.Direction.Up) {
@@ -35,26 +35,13 @@ public class FieldOfView : MonoBehaviour {
 		return VisibleSquares;
 	}
 
-	public static bool Contains(Pathfinder.Point p, Pathfinder.Point[] arr) {
-		for (var x = 0; x < arr.Length; x++) {
-			if (arr[x] == p) {
-				return true;
-			}
-		}
-		return false;
-	}
 	//public Pathfinder.Point[] GetVisibleLine (int x0, int y0)
 
 	public static bool PlotLine (int x, int y) {
-		int idx = VisibleSquares.Length;
 		Pathfinder.Point point = new Pathfinder.Point (x, y);
-		if (Map.Walls [x, y] == null) {
-			bool inthere = Contains(point, VisibleSquares);
-			if (!inthere) {
-				VisibleSquares [idx] = new Pathfinder.Point (x, y);
-				Debug.Log("y0");
-				int blah = 0;
-				Debug.Log ("y0" + blah);
+		if (x  > 0 && y > 0 && x < Map.Width && y < Map.Height && Map.Walls [x, y] == null) {
+			if (!VisibleSquares.Contains(point)) {
+				VisibleSquares.Add (new Pathfinder.Point (x, y));
 			}
 		}
 		return true;

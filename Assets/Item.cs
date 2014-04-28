@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Item : MonoBehaviour {
@@ -40,6 +40,8 @@ public class Item : MonoBehaviour {
 		{
 			return;
 		}
+
+		StoryWindows.isEnabled = true;
 
 		Destroy(gameObject);
 	}

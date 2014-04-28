@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 public class Player : Moving {
 
-	private Dictionary<string, Dictionary<Direction, Texture2D[]>> Textures;
+	//private Dictionary<string, Dictionary<Direction, Texture2D[]>> Textures;
 
 	public Player() : base()
 	{
+		gameObject.AddComponent<StoryWindows>();
 		Direction = Direction.Down;
 
 		Textures = new Dictionary<string, Dictionary<Direction, Texture2D[]>>()
@@ -44,14 +45,14 @@ public class Player : Moving {
 		private set;
 	}
 	
-	private GameObject[] visualizationSquares;
-	private Pathfinder.Point[] visibleSquares;
+	//private List<GameObject> visualizationSquares;
+	private List<Pathfinder.Point> visibleSquares;
 
 	void Start () {
 
 		Map.Player = this;
 
-		visualizationSquares = new GameObject[1000];
+		//visualizationSquares = new List<GameObject>();
 
 		while(!Move (0,0))
 		{
@@ -60,7 +61,6 @@ public class Player : Moving {
 
 	}
 
-	bool renderedFOV = false;
 	void Update ()
 	{
 		if(StartPauseMenu.Paused)
@@ -79,7 +79,6 @@ public class Player : Moving {
 				o.transform.localScale = new Vector3(0.5f, 0.5f, 1.0f);
 				visualizationSquares[q] = o;
 			}
-			Debug.Log("the cone should be visible");
 		}
 
 		int x = 0;
