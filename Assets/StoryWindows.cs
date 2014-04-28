@@ -26,7 +26,7 @@ public class StoryWindows : MonoBehaviour {
 	{
 		int Piece = Random.Range(0, 6);
 
-		switch(x)
+		switch(Piece)
 		{
 		case 0:
 			GUILayout.Label("\nREMINDER TO ASSOCIATES:" +
