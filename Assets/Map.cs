@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public static class Map
@@ -15,6 +16,8 @@ public static class Map
 		Walls = new GameObject[0,0];
 
 		Create.Clear ();
+
+		Pathfinder.Cache.Clear ();
 	}
 
 	public static void Generate()
@@ -23,8 +26,8 @@ public static class Map
 
 		Clear();
 
-		int height = Random.Range (8,16);
-		int width = Random.Range (8,16);
+		int height = Random.Range (8,12);
+		int width = Random.Range (8,12);
 		
 		height <<= 1;
 		width <<= 1;
@@ -65,11 +68,20 @@ public static class Map
 		Create.Enemy();
         Create.Enemy();
         Create.Enemy();
-		
+
+		if(Create.Exit () == null)
+		{
+			Debug.Log ("Rejecting level!");
+			Generate ();
+			return;
+		}
+
 		Paint.Floors();
 		Paint.Walls();
         
-        if(Camera.main == null)
+		// Pathfinder.Cache.PreCache ();
+
+		if(Camera.main == null)
 		{
 			return;
 		}
@@ -232,6 +244,55 @@ public static class Map
 				
 				return quad;
 			}
+		}
+
+		public static GameObject Exit()
+		{
+			int loops = 0;
+
+			while(true)
+			{
+				if(++loops > 100)
+				{
+					break;
+				}
+
+				int x = Random.Range (1, Width - 1);
+				int y = Random.Range (1, Height - 1);
+				
+				if(!IsEmpty (x, y))
+				{
+					continue;
+				}
+
+				if(Map.Player != null)
+				{
+					int playerX = Mathf.RoundToInt (Map.Player.gameObject.transform.position.x);
+					int playerY = Mathf.RoundToInt (Map.Player.gameObject.transform.position.y);
+
+					Pathfinder.Point[] points = Pathfinder.FindPath(playerX, playerY, x, y);
+
+					if(points == null)
+					{
+						continue;
+					}
+
+					if(points.Length < 10)
+					{
+						continue;
+					}
+				}
+
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+				
+				quad.AddComponent<Exit>();
+				
+				quad.transform.position = new Vector2(x, y);
+				
+				return quad;
+			}
+
+			return null;
 		}
 
 		public static bool[,] Floors {
@@ -663,10 +724,14 @@ public static class Map
             Texture2D[] textures = new Texture2D[256];
 
 			textures[0] = Resources.Load<Texture2D>("floor_0");
+			textures[1] = Resources.Load<Texture2D>("floor_1");
+			textures[4] = Resources.Load<Texture2D>("floor_4");
 			textures[5] = Resources.Load<Texture2D>("floor_5");
+			textures[16] = Resources.Load<Texture2D>("floor_16");
 			textures[17] = Resources.Load<Texture2D>("floor_17");
 			textures[20] = Resources.Load<Texture2D>("floor_20");
 			textures[21] = Resources.Load<Texture2D>("floor_21");
+			textures[64] = Resources.Load<Texture2D>("floor_64");
 			textures[65] = Resources.Load<Texture2D>("floor_65");
 			textures[68] = Resources.Load<Texture2D>("floor_68");
 			textures[69] = Resources.Load<Texture2D>("floor_69");
