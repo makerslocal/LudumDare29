@@ -23,7 +23,7 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 256
   textureSettings:
-    filterMode: -1
+    filterMode: 0
     aniso: 1
     mipBias: -1
     wrapMode: 1
@@ -53,11 +53,11 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
     - name: background_tiles_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 224
         width: 32
         height: 32
@@ -66,7 +66,7 @@ TextureImporter:
     - name: background_tiles_2
       rect:
         serializedVersion: 2
-        x: 66
+        x: 64
         y: 224
         width: 32
         height: 32
@@ -75,16 +75,16 @@ TextureImporter:
     - name: background_tiles_3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 96
         y: 224
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
     - name: background_tiles_4
       rect:
         serializedVersion: 2
-        x: 132
+        x: 128
         y: 224
         width: 32
         height: 32
@@ -93,7 +93,7 @@ TextureImporter:
     - name: background_tiles_5
       rect:
         serializedVersion: 2
-        x: 165
+        x: 160
         y: 224
         width: 32
         height: 32
@@ -103,7 +103,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 191
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -111,8 +111,8 @@ TextureImporter:
     - name: background_tiles_7
       rect:
         serializedVersion: 2
-        x: 33
-        y: 191
+        x: 32
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -120,8 +120,8 @@ TextureImporter:
     - name: background_tiles_8
       rect:
         serializedVersion: 2
-        x: 66
-        y: 191
+        x: 64
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -129,8 +129,8 @@ TextureImporter:
     - name: background_tiles_9
       rect:
         serializedVersion: 2
-        x: 99
-        y: 191
+        x: 96
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -138,17 +138,17 @@ TextureImporter:
     - name: background_tiles_10
       rect:
         serializedVersion: 2
-        x: 132
-        y: 191
+        x: 128
+        y: 192
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
     - name: background_tiles_11
       rect:
         serializedVersion: 2
-        x: 165
-        y: 191
+        x: 160
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -157,7 +157,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 158
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -165,17 +165,17 @@ TextureImporter:
     - name: background_tiles_13
       rect:
         serializedVersion: 2
-        x: 33
-        y: 158
+        x: 32
+        y: 160
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
     - name: background_tiles_14
       rect:
         serializedVersion: 2
-        x: 66
-        y: 158
+        x: 64
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -183,8 +183,8 @@ TextureImporter:
     - name: background_tiles_15
       rect:
         serializedVersion: 2
-        x: 99
-        y: 158
+        x: 96
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -192,17 +192,17 @@ TextureImporter:
     - name: background_tiles_16
       rect:
         serializedVersion: 2
-        x: 132
-        y: 158
+        x: 128
+        y: 160
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
     - name: background_tiles_17
       rect:
         serializedVersion: 2
-        x: 0
-        y: 125
+        x: 160
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -210,8 +210,8 @@ TextureImporter:
     - name: background_tiles_18
       rect:
         serializedVersion: 2
-        x: 33
-        y: 125
+        x: 0
+        y: 128
         width: 32
         height: 32
       alignment: 0
@@ -219,8 +219,8 @@ TextureImporter:
     - name: background_tiles_19
       rect:
         serializedVersion: 2
-        x: 66
-        y: 125
+        x: 32
+        y: 128
         width: 32
         height: 32
       alignment: 0
@@ -228,8 +228,8 @@ TextureImporter:
     - name: background_tiles_20
       rect:
         serializedVersion: 2
-        x: 99
-        y: 125
+        x: 64
+        y: 128
         width: 32
         height: 32
       alignment: 0
@@ -237,8 +237,8 @@ TextureImporter:
     - name: background_tiles_21
       rect:
         serializedVersion: 2
-        x: 0
-        y: 92
+        x: 96
+        y: 128
         width: 32
         height: 32
       alignment: 0
@@ -246,8 +246,8 @@ TextureImporter:
     - name: background_tiles_22
       rect:
         serializedVersion: 2
-        x: 33
-        y: 92
+        x: 128
+        y: 128
         width: 32
         height: 32
       alignment: 0
@@ -255,17 +255,17 @@ TextureImporter:
     - name: background_tiles_23
       rect:
         serializedVersion: 2
-        x: 66
-        y: 92
+        x: 160
+        y: 128
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
     - name: background_tiles_24
       rect:
         serializedVersion: 2
-        x: 99
-        y: 92
+        x: 0
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -273,8 +273,8 @@ TextureImporter:
     - name: background_tiles_25
       rect:
         serializedVersion: 2
-        x: 0
-        y: 59
+        x: 32
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -282,35 +282,8 @@ TextureImporter:
     - name: background_tiles_26
       rect:
         serializedVersion: 2
-        x: 33
-        y: 59
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: background_tiles_27
-      rect:
-        serializedVersion: 2
-        x: 66
-        y: 59
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: background_tiles_28
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 26
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: background_tiles_29
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 26
+        x: 64
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -318,8 +291,44 @@ TextureImporter:
     - name: background_tiles_30
       rect:
         serializedVersion: 2
-        x: 66
-        y: 26
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: background_tiles_31
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: background_tiles_32
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: background_tiles_33
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: background_tiles_34
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
         width: 32
         height: 32
       alignment: 0
