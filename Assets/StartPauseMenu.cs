@@ -22,11 +22,12 @@ public class StartPauseMenu: MonoBehaviour {
 
 	bool WindowMain = true;
 	bool WindowMechanics, WindowCredits, WindowBackground, WindowPause = false;
-	
+
+	bool one = true;
+	bool two = false;
+	bool three = false;
+
 	void DoWindowMechanics(int windowID) {
-		bool one = true;
-		bool two = false;
-		bool three = false;
 
 		if(one)
 		{

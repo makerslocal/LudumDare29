@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public static class Map
@@ -235,13 +234,53 @@ public static class Map
 				{
 					continue;
 				}
+
+				List<Pathfinder.Point> points = new List<Pathfinder.Point>();
+
+				for(int i = 0; i < Random.Range (3,5); i++)
+				{
+					int xx;
+					int yy;
+
+					int loop = 0;
+
+					while(true)
+					{
+						if(++loop > 100)
+						{
+							return null;
+						}
+
+						xx = Random.Range (1, Width - 1);
+						yy = Random.Range (1, Height - 1);
+					
+						if(!IsEmpty (x, y))
+						{
+							continue;
+						}
+
+						if(Pathfinder.FindPath (x,y,xx,yy) == null)
+						{
+							continue;
+						}
+
+						break;
+					}
+
+					points.Add (new Pathfinder.Point(x,y));
+
+					x = xx;
+					y = yy;
+				}
 				
 				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
 				
-				quad.AddComponent<Enemy>();
+				Enemy enemy = quad.AddComponent<Enemy>();
 				
+				enemy.Route = points.ToArray ();
+
 				quad.transform.position = new Vector2(x, y);
-				
+								
 				return quad;
 			}
 		}
