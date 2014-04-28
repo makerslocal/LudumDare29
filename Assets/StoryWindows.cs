@@ -26,7 +26,7 @@ public class StoryWindows : MonoBehaviour {
 	{
 		int Piece = Random.Range(0, 6);
 
-		switch(Piece)
+		switch(x)
 		{
 		case 0:
 			GUILayout.Label("\nREMINDER TO ASSOCIATES:" +
@@ -169,5 +169,8 @@ public class StoryWindows : MonoBehaviour {
 			}
 			break;
 		}
+			GUILayout.Label ("\nThe file wasn't complete!");
+			break;
+		} //end switch
 	}
 }
