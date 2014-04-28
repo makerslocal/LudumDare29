@@ -3,7 +3,7 @@ using System.Collections;
 
 public class StartMenu: MonoBehaviour {
 	public GUISkin gooey = null;
-	//public Texture placeholder = placeholder;
+	public Texture2D placeholder;
 
 	bool WindowMain = true;
 	bool WindowMechanics = false;
@@ -12,27 +12,27 @@ public class StartMenu: MonoBehaviour {
 	void OnGUI () {
 		GUI.skin = gooey;
 
-		Rect windowRect = new Rect(Screen.width*0.45f, Screen.height*0.45f, 120, 50);
-		Rect windowRect1 = new Rect (Screen.width * 0.45f, Screen.height * 0.45f, 500, 500);
+		Rect windowRect = new Rect(Screen.width*0.45f, Screen.height*0.45f, 0, 0);
+		Rect windowRect1 = new Rect ((Screen.width/2)-250, (Screen.height/2)-250, 500, 500);
 
 		if(WindowMain)
 		{
-			windowRect = GUILayout.Window(0, windowRect, DoWindowMain, "");
+			windowRect = GUILayout.Window(0, windowRect, DoWindowMain, placeholder, GUILayout.MinWidth(200), GUILayout.MaxWidth(1000));
 		}
 
 		if(WindowMechanics)
 		{
-			windowRect = GUI.Window(1, windowRect1, DoWindowMechanics, "Game Mechanics");
+			windowRect = GUILayout.Window(1, windowRect, DoWindowMechanics, "Game Mechanics", GUILayout.MinWidth(200), GUILayout.MaxWidth(1000));
 		}
 
 		if (WindowCredits) 
 		{
-			windowRect = GUILayout.Window (2, windowRect, DoWindowCredits, "Credits");
+			windowRect = GUILayout.Window (2, windowRect, DoWindowCredits, "Credits", GUILayout.MinWidth(200), GUILayout.MaxWidth(1000));
 		}
 	}
 
 	void DoWindowMain(int windowID) {
-		//GUILayout.Label(Texture(placeholder));
+		GUILayout.Label("Main Menu");
 		if (GUILayout.Button("Start"))
 		{
 			WindowMain = false;
