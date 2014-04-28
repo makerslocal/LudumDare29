@@ -63,8 +63,8 @@ public static class Map
 		Create.Player();
 
 		Create.Enemy();
-		Create.Enemy();
-		Create.Enemy();
+//		Create.Enemy();
+//		Create.Enemy();
 
 		if(Camera.main == null)
 		{
