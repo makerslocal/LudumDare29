@@ -3,7 +3,7 @@ LD29
 
 ### Ludum Dare 29 [2014] - *Beneath the Surface*
 
-![Game Logo][logo]
+![Alt text][logo]
 
 **The year is 2076** and our world is a wasteland of
 nuclear fallout and deadly trains. To this end, humanity 
