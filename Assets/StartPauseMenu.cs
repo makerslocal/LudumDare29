@@ -182,10 +182,6 @@ public class StartMenu: MonoBehaviour {
 				WindowMain = true;
 				WindowMechanics = false;
 			}
-		if (GUILayout.Button("Back"))
-		{
-			WindowMain = true;
-			WindowMechanics = false;
 		}
 	}
 
