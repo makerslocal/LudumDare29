@@ -23,7 +23,7 @@ You are *The Catalyst* and the Cloud must be stopped.
 
 | Contributor | Contribution |
 |-------------|--------------|
-| David “Nyk O’Demus” Brooks | Programmer |
+| David “Nyk O’Demus” Brooks | Programmer, Game Mechanics |
 | Charlotte “Charlaxy” Ellett | Programmer, Game Mechanics, Story |
 | Jesse “Wolfenhex” Schirmer | Programmer, Game Mechanics |
 | Hunter “hfuller” Fuller | Music & Sounds |
