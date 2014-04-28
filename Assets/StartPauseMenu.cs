@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+//test
+
 public class StartMenu: MonoBehaviour {
 	public GUISkin gooey = null;
 	public Texture2D logo;
