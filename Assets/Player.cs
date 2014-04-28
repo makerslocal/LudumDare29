@@ -63,6 +63,11 @@ public class Player : Moving {
 	bool renderedFOV = false;
 	void Update ()
 	{
+		if(StartPauseMenu.Paused)
+		{
+			return;
+		}
+
 		if (!renderedFOV) {
 			renderedFOV = true;
 
@@ -137,10 +142,6 @@ public class Player : Moving {
 
 			texture = Textures["Walk"][direction][Frames % Textures["Walk"][direction].Length];
         }
-
-		Debug.Log (Direction);
-		Debug.Log (texture);
-		Debug.Log (mirror);
 
 		renderer.material.mainTexture = texture;
 		renderer.material.mainTextureScale = new Vector2(mirror ? -1 : 1, 1);

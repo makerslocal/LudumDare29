@@ -10,6 +10,11 @@ public class Item : MonoBehaviour {
 	
 	void Update () {
 
+		if(StartPauseMenu.Paused)
+		{
+			return;
+		}
+
 		if(!Input.GetKey(KeyCode.Space))
 		{
 			return;

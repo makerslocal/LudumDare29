@@ -70,17 +70,76 @@ public class Enemy : Moving {
 			Move (-1, 0);
 		}
 	}
+
+	public int Index
+	{
+		get;
+		private set;
+	}
+
+	public Pathfinder.Point[] Route
+	{
+		get;
+		set;
+	}
+
+	void Patrol()
+	{
+		if(Route == null)
+		{
+			return;
+		}
+
+		if(Route.Length < 1)
+		{
+			return;
+		}
+
+		if(Index >= Route.Length)
+		{
+			Index = 0;
+		}
+
+		Pathfinder.Point point = Route[Index];
+
+		int x = Mathf.RoundToInt (transform.position.x);
+		int y = Mathf.RoundToInt (transform.position.y);
+
+		if(point.X == x && point.Y == y)
+		{
+			Index++;
+			return;
+		}
+
+		Pathfinder.Point[] points = Pathfinder.FindPath (x, y, point.X, point.Y);
+
+		point = points[0];
+		
+		if(point == null)
+		{
+			return;
+		}
+		
+		Move(point.X - x, point.Y - y);
+	}
 	
 	void Start () {
 		renderer.material.color = Color.green;
 	}
 
 	void Update () {
-		
+
+		if(StartPauseMenu.Paused)
+		{
+			return;
+		}
+
 		if (++Frame % 16 > 0) {
 			return;
 		}
 
-		Chase ();
+		Patrol ();
+
+		// Chase ();
 	}
 }
