@@ -1,8 +1,16 @@
 ﻿using UnityEngine;
 
-public abstract class Moving : MonoBehaviour {
+public abstract class Moving : MonoBehaviour
+{
+	public enum Direction
+	{
+		Up = 1,
+		Right = 2,
+		Down = 3,
+		Left = 4,
+	};
 
-	protected bool Move(int X, int Y) {
+	protected virtual bool Move(int X, int Y) {
 		
 		X += Mathf.RoundToInt (transform.position.x);
 		Y += Mathf.RoundToInt (transform.position.y);

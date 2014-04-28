@@ -18,7 +18,7 @@ public class Menu : MonoBehaviour
 		
 		if (GUI.Button(new Rect(10, 130, 150, 50), "Clear / Generate"))
 		{
-			Application.LoadLevel(0);
+			Application.LoadLevel("Empty");
 			Map.Generate();
 		}
 	}

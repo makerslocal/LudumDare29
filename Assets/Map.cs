@@ -699,8 +699,6 @@ public static class Map
 					}
 
 					byte index = Calculate (x, y);
-
-					Debug.Log (index);
                     
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
 					quad.renderer.material.mainTexture = textures[index] ?? textures[255];
