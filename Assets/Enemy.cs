@@ -73,6 +73,7 @@ public class Enemy : Moving {
 	
 	void Start () {
 		renderer.material.color = Color.green;
+		Map.Enemies.Add (this);
 	}
 
 	void Update () {

@@ -44,14 +44,14 @@ public class Player : Moving {
 		private set;
 	}
 	
-	private GameObject[] visualizationSquares;
-	private Pathfinder.Point[] visibleSquares;
+	//private List<GameObject> visualizationSquares;
+	private List<Pathfinder.Point> visibleSquares;
 
 	void Start () {
 
 		Map.Player = this;
 
-		visualizationSquares = new GameObject[1000];
+		//visualizationSquares = new List<GameObject>();
 
 		while(!Move (0,0))
 		{
@@ -60,21 +60,19 @@ public class Player : Moving {
 
 	}
 
-	bool renderedFOV = false;
 	void Update ()
 	{
-		if (!renderedFOV) {
-			renderedFOV = true;
-
-			visibleSquares = FieldOfView.GetVisibleSquares (Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), this.Direction, 0, 5);
-			for (int q = 0; q < visibleSquares.Length; q++) {
-				GameObject o = GameObject.CreatePrimitive(PrimitiveType.Quad);
-				o.renderer.material.color = Color.blue;
-
-				o.transform.localScale = new Vector3(0.5f, 0.5f, 1.0f);
-				visualizationSquares[q] = o;
+		//visualizationSquares.Clear ();
+		visibleSquares = FieldOfView.GetVisibleSquares (Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), this.Direction, 0, 5);
+		Debug.Log("visibleSquares.Count: " + visibleSquares.Count);
+		for (int q = 0; q < visibleSquares.Count; q++) {
+//			GameObject o = GameObject.CreatePrimitive(PrimitiveType.Quad);
+//			o.renderer.material.color = Color.blue;
+//			o.transform.localScale = new Vector3(0.5f, 0.5f, 1.0f);
+//			visualizationSquares.Add (o);
+			if (Map.Enemies.Count > 0) {
+				Debug.Log("I see an enemy");
 			}
-			Debug.Log("the cone should be visible");
 		}
 
 		int x = 0;
