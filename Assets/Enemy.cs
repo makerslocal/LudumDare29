@@ -3,6 +3,7 @@
 public class Enemy : Moving {
 	
 	private Transform player;
+	private GameObject[] vis;
 	
 	protected uint Frame
 	{
@@ -17,33 +18,45 @@ public class Enemy : Moving {
 	
 	void Chase()
 	{
-		AStar astar = new AStar();
-		
-		int goalx = Mathf.RoundToInt (Map.Player.transform.position.x);
-		int goaly = Mathf.RoundToInt (Map.Player.transform.position.y);
-		int startx = Mathf.RoundToInt (transform.position.x);
-		int starty = Mathf.RoundToInt (transform.position.y);
-		AStarNode2D GoalNode = new AStarNode2D(null,null,0,goalx,goaly);
-		AStarNode2D StartNode = new AStarNode2D(null,GoalNode,0,startx,starty);
-		StartNode.GoalNode = GoalNode;
-		astar.FindPath(StartNode,GoalNode);
-		
-		if (astar.Solution.Count > 1) {
-			AStarNode2D firstStep = (AStarNode2D)astar.Solution[1];
-			Move (firstStep.X - startx, firstStep.Y - starty);
+		if (player == null) {
+			player = Map.Player.transform;
+			return;
 		}
+		
+		int goalX = Mathf.RoundToInt (player.position.x);
+		int goalY = Mathf.RoundToInt (player.position.y);
+		int startX = Mathf.RoundToInt (transform.position.x);
+		int startY = Mathf.RoundToInt (transform.position.y);
+
+		Pathfinder.Point[] points = Pathfinder.FindPath (startX, startY, goalX, goalY);
+
+		if(points == null)
+		{
+			return;
+		}
+
+		if(points.Length < 1)
+		{
+			return;
+		}
+
+		Pathfinder.Point point = points[0];
+
+		if(point == null)
+		{
+			return;
+		}
+
+		Move(point.X - startX, point.Y - startY);
 	}
 	
 	void Flee()
 	{
 		if (player == null) {
 			player = Map.Player.transform;
-		}
-		
-		if (player == null) {
 			return;
 		}
-		
+
 		if (player.position.y <= transform.position.y) {
 			Move (0, 1);
 		}			
@@ -57,18 +70,77 @@ public class Enemy : Moving {
 			Move (-1, 0);
 		}
 	}
-	
-	void Start () {
-		renderer.material.color = Color.green;
+
+	public int Index
+	{
+		get;
+		private set;
 	}
-	
-	void Update () {
+
+	public Pathfinder.Point[] Route
+	{
+		get;
+		set;
+	}
+
+	void Patrol()
+	{
+		if(Route == null)
+		{
+			return;
+		}
+
+		if(Route.Length < 1)
+		{
+			return;
+		}
+
+		if(Index >= Route.Length)
+		{
+			Index = 0;
+		}
+
+		Pathfinder.Point point = Route[Index];
+
+		int x = Mathf.RoundToInt (transform.position.x);
+		int y = Mathf.RoundToInt (transform.position.y);
+
+		if(point.X == x && point.Y == y)
+		{
+			Index++;
+			return;
+		}
+
+		Pathfinder.Point[] points = Pathfinder.FindPath (x, y, point.X, point.Y);
+
+		point = points[0];
 		
-		if (++Frame % 20 > 0) {
+		if(point == null)
+		{
 			return;
 		}
 		
-		Flee ();
-		//Chase ();
+		Move(point.X - x, point.Y - y);
+	}
+	
+	void Start () {
+		renderer.material.color = Color.green;
+		Map.Enemies.Add (this);
+	}
+
+	void Update () {
+
+		if(StartPauseMenu.Paused)
+		{
+			return;
+		}
+
+		if (++Frame % 16 > 0) {
+			return;
+		}
+
+		Patrol ();
+
+		// Chase ();
 	}
 }

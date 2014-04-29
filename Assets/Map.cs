@@ -1,48 +1,94 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class Map
 {
 	static Map()
 	{
 		Clear ();
-		Generate();
     }
     
     public static void Clear()
 	{
-		int height = Random.Range (4,8);
-		int width = Random.Range (4,8);
+		Player = null;
+		Enemies = new List<Enemy>();
+
+		Walls = new GameObject[0,0];
+
+		Create.Clear ();
+
+		Pathfinder.Cache.Clear ();
+	}
+
+	public static void Generate()
+	{
+		Debug.Log ("Generating Level...");
+
+		Clear();
+
+		int height = Random.Range (8,12);
+		int width = Random.Range (8,12);
 		
 		height <<= 1;
 		width <<= 1;
 		
 		height++;
 		width++;
-		
-		Walls = new GameObject[width, height];
 
-		Create.Clear ();
-	}
+		Walls = null;
+        
+        Walls = new GameObject[width, height];
 
-	public static void Generate()
-	{
-		Clear();
+		Create.Reset ();
+
+		int count = Height * Width * 10;
         
 		Create.Border ();
-		
-		while(!Create.Room());
-		
-		for(int i = 0; i < 5; i++)
+
+		for(int i = 0; i < count; i++)
 		{
 			Create.Room();
 		}
 		
-		for(int i = 0; i < 10; i++)
-        {
+		for(int i = 0; i < count; i++)
+		{
+			Create.Hall();
+		}
+
+		for(int i = 0; i < count; i++)
+		{
 			Create.Pillar();
-        }
-    }
-    
+		}
+
+		Create.Item();
+		Create.Item();
+		
+		Create.Player();
+
+		Create.Enemy();
+        Create.Enemy();
+        Create.Enemy();
+
+		if(Create.Exit () == null)
+		{
+			Debug.Log ("Rejecting level!");
+			Generate ();
+			return;
+		}
+
+		Paint.Floors();
+		Paint.Walls();
+        
+		// Pathfinder.Cache.PreCache ();
+
+		if(Camera.main == null)
+		{
+			return;
+		}
+		
+		Camera.main.backgroundColor = Color.black;
+	}
+	
     public static int Height {
 		get {
 			return Walls.GetLength (1);
@@ -50,6 +96,11 @@ public static class Map
 	}
 
 	public static Player Player {
+		get;
+		set;
+	}
+
+	public static List<Enemy> Enemies {
 		get;
 		set;
 	}
@@ -105,9 +156,9 @@ public static class Map
         
         public static void Clear()
 		{
-			Floors = new bool[Width, Height];
+			Floors = new bool[0,0];
 		}
-
+		
 		public static bool Door(int x, int y)
 		{
 			return Floor (x, y);
@@ -151,7 +202,7 @@ public static class Map
                     continue;
                 }
 
-				if(xx == x + width && yy == y)
+				if(xx == x + width - 1 && yy == y)
 				{
 					continue;
                 }
@@ -176,6 +227,117 @@ public static class Map
 
 			return false;
             
+		}
+
+		public static GameObject Enemy()
+		{
+			while(true)
+			{
+				int x = Random.Range (1, Width - 1);
+				int y = Random.Range (1, Height - 1);
+				
+				if(!IsEmpty (x, y))
+				{
+					continue;
+				}
+
+				List<Pathfinder.Point> points = new List<Pathfinder.Point>();
+
+				for(int i = 0; i < Random.Range (3,5); i++)
+				{
+					int xx;
+					int yy;
+
+					int loop = 0;
+
+					while(true)
+					{
+						if(++loop > 100)
+						{
+							return null;
+						}
+
+						xx = Random.Range (1, Width - 1);
+						yy = Random.Range (1, Height - 1);
+					
+						if(!IsEmpty (x, y))
+						{
+							continue;
+						}
+
+						if(Pathfinder.FindPath (x,y,xx,yy) == null)
+						{
+							continue;
+						}
+
+						break;
+					}
+
+					points.Add (new Pathfinder.Point(x,y));
+
+					x = xx;
+					y = yy;
+				}
+				
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+				
+				Enemy enemy = quad.AddComponent<Enemy>();
+				
+				enemy.Route = points.ToArray ();
+
+				quad.transform.position = new Vector2(x, y);
+								
+				return quad;
+			}
+		}
+
+		public static GameObject Exit()
+		{
+			int loops = 0;
+
+			while(true)
+			{
+				if(++loops > 100)
+				{
+					break;
+				}
+
+				int x = Random.Range (1, Width - 1);
+				int y = Random.Range (1, Height - 1);
+				
+				if(!IsEmpty (x, y))
+				{
+					continue;
+				}
+
+				if(Map.Player != null)
+				{
+					int playerX = Mathf.RoundToInt (Map.Player.gameObject.transform.position.x);
+					int playerY = Mathf.RoundToInt (Map.Player.gameObject.transform.position.y);
+
+					Pathfinder.Point[] points = Pathfinder.FindPath(playerX, playerY, x, y);
+
+					if(points == null)
+					{
+						continue;
+					}
+
+					if(points.Length < 10)
+					{
+						continue;
+					}
+				}
+
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+				
+				quad.AddComponent<Exit>();
+				
+				quad.transform.position = new Vector2(x, y);
+				
+				return quad;
+			}
+
+			return null;
 		}
 
 		public static bool[,] Floors {
@@ -217,32 +379,162 @@ public static class Map
 
 		public static bool Hall()
 		{
-			bool Created = false;
+			int loops = 0;
 
-			int x = Random.Range (1, (Width >> 1) - 1);
-			int y = Random.Range (1, (Height >> 1) - 1);
-			
-            x <<= 1;
-            y <<= 1;
+			int x;
+			int y;
 
 			while(true)
 			{
-				for(int xx = -1; xx <= 1; xx++)
+				if(++loops > 100)
 				{
-					for(int yy = -1; yy <= 1; yy++)
-					{
-						int xxx = x + xx;
-						int yyy = y + yy;
-						
-	                    if(Walls[xxx, yyy] != null)
-	                    {
-							return Created;
-	                    }
-	                }
-	            }
+					return false;
+				}
+
+				x = Random.Range (1, (Width >> 1) - 1);
+				y = Random.Range (1, (Height >> 1) - 1);
+
+				x <<= 1;
+				y <<= 1;
+
+				if(!IsEmpty (1, x, y))
+				{
+					continue;
+				}
+
+				break;
 			}
+
+			int length = 0;
+
+			loops = 0;
+
+			while(true)
+			{
+				if(++loops > 25)
+				{
+					break;
+				}
+
+				int xx = x;
+				int yy = y;
+
+				switch(Random.Range (1, 4))
+				{
+					case 1:
+						xx -= 2;
+						break;
+
+					case 2:
+						xx += 2;
+						break;
+
+					case 3:
+						yy -= 2;
+						break;
+
+					case 4:
+						yy -= 2;
+						break;
+
+					default:
+						continue;
+				}
+
+				if(!IsEmpty (1, xx, yy))
+				{
+					continue;
+				}
+
+				for(int xxx = Mathf.Min (x, xx); xxx <= Mathf.Max (x, xx); xxx++)
+				{
+					for(int yyy = Mathf.Min (y, yy); yyy <= Mathf.Max (y, yy); yyy++)
+					{
+						Wall (xxx,yyy);
+					}
+				}
+
+				length++;
+			}
+
+			return length > 0;
         }
-        
+
+		private static bool IsEmpty(int border, int x, int y)
+		{
+			if(border == 0)
+			{
+				return Walls[x, y] == null;
+			}
+
+			for(int xx = -border; xx <= border; xx++)
+			{
+				for(int yy = -border; yy <= border; yy++)
+				{
+					int xxx = x + xx;
+
+					if(xxx < 0)
+					{
+						return false;
+					}
+					
+					if(xxx >= Width)
+					{
+						return false;
+					}
+
+					int yyy = y + yy;
+
+					if(yyy < 0)
+					{
+						return false;
+					}
+
+					if(yyy >= Height)
+					{
+						return false;
+					}
+					
+					if(Walls[xxx, yyy] != null)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		private static bool IsEmpty(int x, int y)
+		{
+			return IsEmpty (0, x, y);
+		}
+
+		public static GameObject Item()
+		{
+			while(true)
+			{
+				int x = Random.Range (1, (Width >> 1) - 1);
+				int y = Random.Range (1, (Height >> 1) - 1);
+
+				x <<= 1;
+				y <<= 1;
+
+				if(!IsEmpty (x,y))
+				{
+					continue;
+				}
+
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+				quad.AddComponent<Item>();
+
+				quad.transform.position = new Vector2(x, y);
+
+				return quad;
+			}
+		}
+
 		public static bool Pillar()
 		{
 			int x = Random.Range (1, (Width >> 1) - 1);
@@ -251,18 +543,9 @@ public static class Map
 			x <<= 1;
 			y <<= 1;
 
-			for(int xx = -1; xx <= 1; xx++)
-            {
-				for(int yy = -1; yy <= 1; yy++)
-				{
-					int xxx = x + xx;
-					int yyy = y + yy;
-
-					if(Walls[xxx, yyy] != null)
-					{
-						return false;
-					}
-				}
+			if(!IsEmpty (1, x, y))
+			{
+				return false;
 			}
 
 			if(!Wall (x, y))
@@ -279,6 +562,39 @@ public static class Map
             }
 
 			return true;
+		}
+
+		public static GameObject Player()
+		{
+			if(Map.Player != null)
+			{
+				return Map.Player.gameObject;
+			}
+
+			while(true)
+			{
+				int x = Random.Range (1, Width - 1);
+				int y = Random.Range (1, Height - 1);
+				
+				if(!IsEmpty (x, y))
+				{
+					continue;
+				}
+				
+				GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+				Map.Player = quad.AddComponent<Player>();
+				
+				quad.transform.position = new Vector2(x, y);
+
+				return quad;
+			}
+		}
+
+		public static void Reset()
+		{
+			Floors = null;
+			Floors = new bool[Width, Height];
 		}
 
 		public static bool Room()
@@ -372,4 +688,182 @@ public static class Map
 	}
 
 	#endregion
+
+	#region Paint
+
+	private static class Paint
+	{
+		private static byte Calculate(int x, int y)
+		{
+			byte value = 0;
+
+			if(y >= Height - 1)
+			{
+				value |= 3 << 0;
+			}
+			else
+			{
+				if(Map.Walls[x, y + 1] != null)
+				{
+					value |= 1 << 0;
+				}
+				else if(y < Height - 2 && Map.Walls[x, y + 2] != null)
+				{
+					value |= 1 << 1;
+				}
+			}
+
+			if(x >= Width - 1)
+			{
+				value |= 3 << 2;
+			}
+			else
+			{
+				if(Map.Walls[x + 1, y] != null)
+				{
+					value |= 1 << 2;
+				}
+				else if(x < Width - 2 && Map.Walls[x + 2, y] != null)
+				{
+					value |= 1 << 3;
+				}
+			}
+
+			if(y <= 0)
+			{
+				value |= 3 << 4;
+			}
+			else
+			{
+				if(Map.Walls[x, y - 1] != null)
+				{
+					value |= 1 << 4;
+				}
+				else if(y > 1 &&  Map.Walls[x, y - 2] != null)
+				{
+					value |= 1 << 5;
+				}
+			}
+
+			if(x <= 0)
+			{
+				value |= 3 << 6;
+			}
+			else
+			{
+				if(Map.Walls[x - 1, y] != null)
+				{
+					value |= 1 << 6;
+				}
+				else if(x > 1 && Map.Walls[x - 2, y] != null)
+				{
+					value |= 1 << 7;
+				}
+			}
+
+			return value;
+        }
+        
+        public static void Floors()
+        {
+            Texture2D[] textures = new Texture2D[256];
+
+			textures[0] = Resources.Load<Texture2D>("floor_0");
+			textures[1] = Resources.Load<Texture2D>("floor_1");
+			textures[4] = Resources.Load<Texture2D>("floor_4");
+			textures[5] = Resources.Load<Texture2D>("floor_5");
+			textures[16] = Resources.Load<Texture2D>("floor_16");
+			textures[17] = Resources.Load<Texture2D>("floor_17");
+			textures[20] = Resources.Load<Texture2D>("floor_20");
+			textures[21] = Resources.Load<Texture2D>("floor_21");
+			textures[64] = Resources.Load<Texture2D>("floor_64");
+			textures[65] = Resources.Load<Texture2D>("floor_65");
+			textures[68] = Resources.Load<Texture2D>("floor_68");
+			textures[69] = Resources.Load<Texture2D>("floor_69");
+			textures[80] = Resources.Load<Texture2D>("floor_80");
+			textures[81] = Resources.Load<Texture2D>("floor_81");
+			textures[84] = Resources.Load<Texture2D>("floor_84");
+			textures[255] = Resources.Load<Texture2D>("floor_255");
+
+			textures[1] = textures[17];
+			textures[4] = textures[68];
+			textures[16] = textures[17];
+			textures[64] = textures[68];
+
+			for(int i = 0; i < textures.Length; i++)
+			{
+				if(textures[i] != null)
+				{
+					continue;
+				}
+			}
+
+
+            for(int x = 0; x < Width; x++)
+			{
+				for(int y = 0; y < Height; y++)
+				{
+					if(Map.Walls[x,y] != null)
+					{
+						continue;
+					}
+
+					byte index = Calculate (x, y);
+                    
+                    GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+					quad.renderer.material.mainTexture = textures[index] ?? textures[255];
+                    quad.transform.position = new Vector3(x, y, 0.1f);
+                }
+			}
+		}
+
+		public static void Walls()
+		{
+			Texture2D[] textures = new Texture2D[256];
+
+			textures[17] = Resources.Load<Texture2D>("wall_17");
+			textures[65] = Resources.Load<Texture2D>("wall_65");
+			textures[68] = Resources.Load<Texture2D>("wall_68");
+			textures[84] = Resources.Load<Texture2D>("wall_84");
+			textures[85] = Resources.Load<Texture2D>("wall_85");
+			textures[255] = Resources.Load<Texture2D>("wall_255");
+
+			for(int i = 0; i < textures.Length; i++)
+			{
+				if(textures[i] != null)
+				{
+					continue;
+				}
+
+				for(int s = 0; s < 4; s++)
+				{
+					if((i & (3 << s)) != (3 << s))
+					{
+							continue;
+					}
+
+					textures[i] = textures[0xFF];
+				}
+			}
+
+			for(int x = 0; x < Width; x++)
+			{
+				for(int y = 0; y < Height; y++)
+				{
+					if(Map.Walls[x,y] == null)
+					{
+                        continue;
+                    }
+
+					byte index = Calculate (x, y);
+
+                    GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+					quad.renderer.material.mainTexture = textures[index] ?? textures[255];
+                    quad.transform.position = new Vector3(x, y, -0.1f);
+                }
+            }
+        }
+    }
+    
+    #endregion
 }
