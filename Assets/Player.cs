@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Player : Moving {
 
-	//private Dictionary<string, Dictionary<Direction, Texture2D[]>> Textures;
+	private Dictionary<string, Dictionary<Direction, Texture2D[]>> Textures;
 
 	public Player() : base()
 	{
@@ -68,18 +68,13 @@ public class Player : Moving {
 			return;
 		}
 
-		if (!renderedFOV) {
-			renderedFOV = true;
-
 			visibleSquares = FieldOfView.GetVisibleSquares (Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), this.Direction, 0, 5);
-			for (int q = 0; q < visibleSquares.Length; q++) {
+			for (int q = 0; q < visibleSquares.Count; q++) {
 				GameObject o = GameObject.CreatePrimitive(PrimitiveType.Quad);
 				o.renderer.material.color = Color.blue;
 
 				o.transform.localScale = new Vector3(0.5f, 0.5f, 1.0f);
-				visualizationSquares[q] = o;
 			}
-		}
 
 		int x = 0;
 		int y = 0;
